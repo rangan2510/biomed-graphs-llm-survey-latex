@@ -1,0 +1,921 @@
+% references.bib -- Biomedical KG-LLM survey (AISE invited)
+% Built from the manuscript's cited sources. URLs preserved where DOIs were
+% not available in the source. Entries marked NOTE need metadata verification
+% before camera-ready.
+
+% ===================== This work =====================
+@misc{supplementary,
+  author       = {Das, Rangan and Ghosh, Sounak and Dasgupta, Sushmit and
+                  Bandyopadhyay Maulik, Utsav and Maulik, Ujjwal and
+                  Bandyopadhyay, Sanghamitra},
+  title        = {Supplementary Material for ``Biomedical Knowledge Graphs and Large Language Models: A Critical Engineering Survey''},
+  howpublished = {Accompanying this article},
+  year         = {2026},
+  note         = {Contains the reporting package, reproducibility grading scale, graph data card, maturity gate criteria, privacy architecture, monitoring signals, and benchmark and leakage analyses}
+}
+
+% ===================== Prior surveys =====================
+% TODO camera-ready: confirm full author list and page range.
+@inproceedings{xu2025biomedklm,
+  author    = {Xu and others},
+  title     = {A Survey on Unifying Large Language Models and Knowledge Graphs for Biomedicine and Healthcare},
+  booktitle = {Proc. ACM SIGKDD Conf. Knowledge Discovery and Data Mining (KDD)},
+  year      = {2025},
+  pubmed    = {41858611}
+}
+
+@article{murali2026integrating,
+  author  = {Murali, Lino and others},
+  title   = {Integrating {LLMs} and Knowledge Graphs for Medical {AI}: Advances, Challenges, and Future Directions},
+  journal = {IEEE Journal of Biomedical and Health Informatics},
+  volume  = {30},
+  number  = {5},
+  pages   = {3833--3848},
+  year    = {2026}
+}
+
+% TODO camera-ready: confirm volume and page range.
+@article{liu2025biomedrag,
+  author  = {Liu and others},
+  title   = {Retrieval-Augmented Generation in Biomedicine: A Systematic Review and Meta-Analysis},
+  journal = {Journal of the American Medical Informatics Association},
+  year    = {2025},
+  pmcid   = {PMC12005634}
+}
+
+@misc{he2025biomedrag,
+  author     = {He and others},
+  title      = {A Survey of Biomedical Retrieval-Augmented Generation},
+  year       = {2025},
+  eprint     = {2505.01146},
+  eprinttype = {arXiv},
+  note       = {Preprint}
+}
+
+@misc{lu2025biomedkg,
+  author     = {Lu and others},
+  title      = {Biomedical Knowledge Graphs: A Survey},
+  year       = {2025},
+  eprint     = {2501.11632},
+  eprinttype = {arXiv},
+  note       = {Preprint}
+}
+
+@article{graphrag2025survey,
+  author  = {Peng, Boci and Zhu, Yun and Liu, Yongchao and Bo, Xiaohe and
+             Shi, Haizhou and Hong, Chuntao and Zhang, Yan and Tang, Siliang},
+  title   = {Graph Retrieval-Augmented Generation: A Survey},
+  journal = {ACM Transactions on Information Systems},
+  volume  = {44},
+  number  = {2},
+  pages   = {1--52},
+  year    = {2025},
+  doi     = {10.1145/3777378}
+}
+
+% ===================== Knowledge graphs / resources =====================
+@article{himmelstein2017hetionet,
+  author  = {Himmelstein, Daniel S. and others},
+  title   = {Systematic integration of biomedical knowledge prioritizes drugs for repurposing},
+  journal = {eLife},
+  volume  = {6},
+  pages   = {e26726},
+  year    = {2017}
+}
+
+@article{morris2023spoke,
+  author  = {Morris, John H. and others},
+  title   = {The scalable precision medicine open knowledge engine ({SPOKE})},
+  journal = {Bioinformatics},
+  volume  = {39},
+  number  = {2},
+  pages   = {btad080},
+  year    = {2023}
+}
+
+@article{santos2022ckg,
+  author  = {Santos, Alberto and others},
+  title   = {A knowledge graph to interpret clinical proteomics data},
+  journal = {Nature Biotechnology},
+  volume  = {40},
+  pages   = {692--702},
+  year    = {2022}
+}
+
+@article{chandak2023primekg,
+  author  = {Chandak, Payal and Huang, Kexin and Zitnik, Marinka},
+  title   = {Building a knowledge graph to enable precision medicine ({PrimeKG})},
+  journal = {Scientific Data},
+  volume  = {10},
+  pages   = {67},
+  year    = {2023}
+}
+
+% TODO camera-ready: confirm volume and page range.
+@article{zhang2025ikraph,
+  author  = {Zhang and others},
+  title   = {{iKraph}: A comprehensive biomedical knowledge graph from literature and databases},
+  journal = {Nature Machine Intelligence},
+  year    = {2025}
+}
+
+% TODO camera-ready: confirm volume and page range.
+@article{xu2025pubmedkg,
+  author  = {Xu and others},
+  title   = {{PubMed} Knowledge Graph 2.0},
+  journal = {Scientific Data},
+  year    = {2025}
+}
+
+@article{breit2020openbiolink,
+  author  = {Breit, Anna and others},
+  title   = {{OpenBioLink}: a benchmarking framework for large-scale biomedical link prediction},
+  journal = {Bioinformatics},
+  volume  = {36},
+  number  = {13},
+  pages   = {4097--4098},
+  year    = {2020}
+}
+
+@misc{ioannidis2020drkg,
+  author       = {Ioannidis, Vassilis N. and others},
+  title        = {{DRKG} -- Drug Repurposing Knowledge Graph for Covid-19},
+  howpublished = {\url{https://github.com/gnn4dr/DRKG}},
+  year         = {2020}
+}
+
+@article{dang2025biomedkg,
+  author  = {Dang and others},
+  title   = {{BioMedKG} and {PrimeKG++}: multimodal biomedical representation learning},
+  journal = {Frontiers in Systems Biology},
+  year    = {2025},
+  doi     = {10.3389/fsysb.2025.1651930}
+}
+
+@misc{johnson2024mimiciv,
+  author       = {Johnson, Alistair E. W. and others},
+  title        = {{MIMIC-IV} v3.1},
+  howpublished = {PhysioNet},
+  year         = {2024},
+  note         = {\url{https://physionet.org/content/mimiciv/3.1/}}
+}
+
+@misc{johnson2023mimicnote,
+  author       = {Johnson, Alistair E. W. and others},
+  title        = {{MIMIC-IV-Note} v2.2},
+  howpublished = {PhysioNet},
+  year         = {2023},
+  note         = {\url{https://physionet.org/content/mimic-iv-note/2.2/}}
+}
+
+@article{johnson2023mimicdata,
+  author  = {Johnson, Alistair E. W. and others},
+  title   = {{MIMIC-IV}, a freely accessible electronic health record dataset},
+  journal = {Scientific Data},
+  volume  = {10},
+  pages   = {1},
+  year    = {2023}
+}
+
+% ===================== KG-to-LLM methods =====================
+@article{soman2024kgrag,
+  author  = {Soman, Karthik and others},
+  title   = {Biomedical knowledge graph-optimized prompt generation for large language models},
+  journal = {Bioinformatics},
+  volume  = {40},
+  number  = {9},
+  pages   = {btae560},
+  year    = {2024}
+}
+
+@inproceedings{wen2024mindmap,
+  author    = {Wen, Yilin and Wang, Zonghan and Sun, Jie},
+  title     = {{MindMap}: Knowledge Graph Prompting Sparks Graph of Thoughts in Large Language Models},
+  booktitle = {Proc. 62nd Annual Meeting of the Association for Computational Linguistics (ACL)},
+  year      = {2024}
+}
+
+@inproceedings{park2025illama,
+  author    = {Park and others},
+  title     = {{ILlama}: {UMLS} triple-document retrieval for medical consultation},
+  booktitle = {Proc. Conf. Empirical Methods in Natural Language Processing (EMNLP)},
+  year      = {2025}
+}
+
+@misc{emonet2024sparql,
+  author     = {Emonet, Vincent and others},
+  title      = {{LLM}-based {SPARQL} query generation for federated bioinformatics knowledge graphs},
+  year       = {2024},
+  eprint     = {2410.06062},
+  eprinttype = {arXiv},
+  note       = {Preprint}
+}
+
+@article{lobentanzer2024biochatter,
+  author  = {Lobentanzer, Sebastian and others},
+  title   = {A platform for the biomedical application of large language models ({BioChatter})},
+  journal = {Nature Biotechnology},
+  year    = {2024},
+  note    = {\url{https://biocypher.github.io/biochatter-paper/}}
+}
+
+@inproceedings{sun2024tog,
+  author    = {Sun, Jiashuo and others},
+  title     = {Think-on-Graph: Deep and Responsible Reasoning of Large Language Model on Knowledge Graph},
+  booktitle = {Proc. Int. Conf. Learning Representations (ICLR)},
+  year      = {2024}
+}
+
+@inproceedings{luo2024rog,
+  author    = {Luo, Linhao and others},
+  title     = {Reasoning on Graphs: Faithful and Interpretable Large Language Model Reasoning},
+  booktitle = {Proc. Int. Conf. Learning Representations (ICLR)},
+  year      = {2024}
+}
+
+@article{matsumoto2024kragen,
+  author  = {Matsumoto, Nicholas and others},
+  title   = {{KRAGEN}: a knowledge graph-enhanced {RAG} framework for biomedical problem solving using large language models},
+  journal = {Bioinformatics},
+  volume  = {40},
+  number  = {6},
+  pages   = {btae353},
+  year    = {2024}
+}
+
+@article{zuo2025drknows,
+  author  = {Zuo and others},
+  title   = {{DR.KNOWS}: Knowledge graph-grounded diagnosis generation from clinical notes},
+  journal = {JMIR AI},
+  volume  = {4},
+  pages   = {e58670},
+  year    = {2025}
+}
+
+@inproceedings{jia2025medikal,
+  author    = {Jia and others},
+  title     = {{medIKAL}: Integrating knowledge graphs as assistants of {LLMs} for enhanced clinical diagnosis on {EMRs}},
+  booktitle = {Proc. Int. Conf. Computational Linguistics (COLING)},
+  year      = {2025}
+}
+
+@inproceedings{jiang2025hykge,
+  author    = {Jiang and others},
+  title     = {{HyKGE}: A hypothesis knowledge graph-enhanced framework for accurate and reliable medical {LLMs} responses},
+  booktitle = {Proc. 63rd Annual Meeting of the Association for Computational Linguistics (ACL)},
+  year      = {2025}
+}
+
+@inproceedings{liu2026kgrxn,
+  author    = {Liu and others},
+  title     = {{KGRxn-LLM}: Hierarchical chemical knowledge graph reasoning},
+  booktitle = {Proc. BioNLP Workshop},
+  year      = {2026}
+}
+
+@misc{edge2024graphrag,
+  author     = {Edge, Darren and others},
+  title      = {From Local to Global: A Graph {RAG} Approach to Query-Focused Summarization},
+  year       = {2024},
+  eprint     = {2404.16130},
+  eprinttype = {arXiv},
+  note       = {Preprint}
+}
+
+@inproceedings{jiang2025kare,
+  author    = {Jiang and others},
+  title     = {{KARE}: Knowledge-augmented reasoning for clinical prediction with hierarchical graph communities},
+  booktitle = {Proc. Int. Conf. Learning Representations (ICLR)},
+  year      = {2025}
+}
+
+@inproceedings{zhao2025medrag,
+  author    = {Zhao and others},
+  title     = {{MedRAG}: Enhancing retrieval-augmented generation with knowledge graph-elicited reasoning for healthcare},
+  booktitle = {Proc. ACM Web Conf. (WWW)},
+  year      = {2025},
+  doi       = {10.1145/3696410.3714782}
+}
+
+@inproceedings{wu2025medgraphrag,
+  author    = {Wu, Junde and others},
+  title     = {{MedGraphRAG}: Towards safe medical large language models via graph retrieval-augmented generation},
+  booktitle = {Proc. 63rd Annual Meeting of the Association for Computational Linguistics (ACL)},
+  year      = {2025}
+}
+
+@inproceedings{wang2024biobridge,
+  author    = {Wang, Zifeng and others},
+  title     = {{BioBridge}: Bridging Biomedical Foundation Models via Knowledge Graphs},
+  booktitle = {Proc. Int. Conf. Learning Representations (ICLR)},
+  year      = {2024}
+}
+
+@misc{cabello2024meg,
+  author     = {Cabello and others},
+  title      = {{MEG}: Medical knowledge-augmented large language models for question answering},
+  year       = {2024},
+  eprint     = {2411.03883},
+  eprinttype = {arXiv},
+  note       = {Preprint}
+}
+
+@inproceedings{kerdabadi2026medco,
+  author    = {Kerdabadi and others},
+  title     = {{MedCo}: Medical-code knowledge graph and language representation fusion for clinical prediction},
+  booktitle = {Proc. Annual Meeting of the Association for Computational Linguistics (ACL)},
+  year      = {2026}
+}
+
+@inproceedings{wu2026medkinstruct,
+  author    = {Wu and others},
+  title     = {{MedKInstruct}: Knowledge graph-guided instruction synthesis for multimodal medical reasoning},
+  booktitle = {Findings of the Association for Computational Linguistics (ACL)},
+  year      = {2026}
+}
+
+@inproceedings{su2025kgarevion,
+  author    = {Su and others},
+  title     = {{KGARevion}: An {LLM} knowledge graph agent for knowledge-intensive medical question answering},
+  booktitle = {Proc. Int. Conf. Learning Representations (ICLR)},
+  year      = {2025}
+}
+
+@inproceedings{wang2026crossddi,
+  author    = {Wang and others},
+  title     = {{CrossDDI}: Evidence extraction and deterministic arbitration for drug-drug interaction},
+  booktitle = {Proc. BioNLP Workshop},
+  year      = {2026}
+}
+
+@inproceedings{ma2026vericite,
+  author    = {Ma and others},
+  title     = {{VERICITE}: Sentence-level citation faithfulness in biomedical question answering},
+  booktitle = {Proc. BioNLP Workshop},
+  year      = {2026}
+}
+
+% ===================== LLM-to-KG methods =====================
+@article{caufield2024spires,
+  author  = {Caufield, J. Harry and others},
+  title   = {Structured Prompt Interrogation and Recursive Extraction of Semantics ({SPIRES})},
+  journal = {eScholarship (OntoGPT)},
+  year    = {2024},
+  note    = {\url{https://escholarship.org/uc/item/7b51j34r}}
+}
+
+@inproceedings{arsenyan2024emr,
+  author    = {Arsenyan, Vahan and others},
+  title     = {Large language models for biomedical knowledge graph construction from {EMR} notes},
+  booktitle = {Proc. BioNLP Workshop},
+  year      = {2024}
+}
+
+@inproceedings{olasunkanmi2026relate,
+  author    = {Olasunkanmi and others},
+  title     = {{RELATE}: Ontology-guided relation reranking for biomedical extraction},
+  booktitle = {Proc. Machine Learning for Health (ML4H)},
+  year      = {2026}
+}
+
+@article{gao2025mdkg,
+  author  = {Gao and others},
+  title   = {A large-scale mental disorders knowledge graph constructed with human-in-the-loop {LLM} curation},
+  journal = {Nature Communications},
+  year    = {2025},
+  note    = {\url{https://www.nature.com/articles/s41467-025-62781-z}}
+}
+
+@inproceedings{jiang2024graphcare,
+  author    = {Jiang, Pengcheng and others},
+  title     = {{GraphCare}: Enhancing healthcare predictions with personalized knowledge graphs},
+  booktitle = {Proc. Int. Conf. Learning Representations (ICLR)},
+  year      = {2024}
+}
+
+@inproceedings{xiao2025drkgc,
+  author    = {Xiao and others},
+  title     = {{DrKGC}: Dynamic subgraph retrieval-augmented {LLMs} for knowledge graph completion},
+  booktitle = {Findings of the Association for Computational Linguistics (EMNLP)},
+  year      = {2025}
+}
+
+@inproceedings{xiang2025lladr,
+  author    = {Xiang and others},
+  title     = {{LLaDR}: {LLM}-augmented description learning for drug repurposing knowledge graph embeddings},
+  booktitle = {Findings of the Association for Computational Linguistics (EMNLP)},
+  year      = {2025}
+}
+
+% ===================== Bidirectional / agentic / temporal =====================
+@inproceedings{li2024dalk,
+  author    = {Li and others},
+  title     = {{DALK}: Dynamic co-augmentation of {LLMs} and knowledge graphs for scientific literature},
+  booktitle = {Findings of the Association for Computational Linguistics (EMNLP)},
+  year      = {2024}
+}
+
+@inproceedings{xu2024gog,
+  author    = {Xu and others},
+  title     = {Generate-on-Graph: Treat {LLM} as both agent and knowledge graph for incomplete knowledge graph question answering},
+  booktitle = {Proc. Conf. Empirical Methods in Natural Language Processing (EMNLP)},
+  year      = {2024}
+}
+
+@inproceedings{rezaei2025amgrag,
+  author    = {Rezaei and others},
+  title     = {{AMG-RAG}: Agentic medical knowledge graph construction and retrieval-augmented reasoning},
+  booktitle = {Findings of the Association for Computational Linguistics (EMNLP)},
+  year      = {2025}
+}
+
+@inproceedings{ma2025tog2,
+  author    = {Ma and others},
+  title     = {Think-on-Graph 2.0: Deep and Interpretable Large Language Model Reasoning with Knowledge Graph-Guided Retrieval},
+  booktitle = {Proc. Int. Conf. Learning Representations (ICLR)},
+  year      = {2025}
+}
+
+@misc{wang2025eegmedrag,
+  author     = {Wang and others},
+  title      = {{EEG-MedRAG}: Hypergraph retrieval for {EEG}-based diagnostic reasoning},
+  year       = {2025},
+  eprint     = {2508.13735},
+  eprinttype = {arXiv},
+  note       = {Preprint}
+}
+
+@misc{zhang2025medkgent,
+  author     = {Zhang and others},
+  title      = {{MedKGent}: Temporal medical knowledge graph construction with {LLM} agents},
+  year       = {2025},
+  eprint     = {2508.12393},
+  eprinttype = {arXiv},
+  note       = {Preprint}
+}
+
+@misc{ahmed2026chronomedkg,
+  author     = {Ahmed, M. S. and others},
+  title      = {{ChronoMedKG}: A Temporally-Grounded, Evidence-Graded Biomedical Knowledge Graph and Benchmark for Temporal Clinical Reasoning},
+  year       = {2026},
+  eprint     = {2605.22734},
+  eprinttype = {arXiv},
+  note       = {Preprint}
+}
+
+% ===================== Ontologies / terminologies =====================
+@misc{umls,
+  author       = {{U.S. National Library of Medicine}},
+  title        = {Unified Medical Language System ({UMLS})},
+  howpublished = {\url{https://www.nlm.nih.gov/research/umls/index.html}},
+  year         = {2026}
+}
+
+@misc{nlmumlsarchive,
+  author       = {{U.S. National Library of Medicine}},
+  title        = {{UMLS} Release Archive},
+  howpublished = {\url{https://www.nlm.nih.gov/research/umls/archive/archive_home.html}},
+  year         = {2026}
+}
+
+@misc{snomedct,
+  author       = {{SNOMED International}},
+  title        = {{SNOMED CT}},
+  howpublished = {\url{https://www.snomed.org/value-of-snomedct}},
+  year         = {2026}
+}
+
+@misc{snomedget,
+  author       = {{SNOMED International}},
+  title        = {Get {SNOMED CT}},
+  howpublished = {\url{https://www.snomed.org/get-snomed}},
+  year         = {2026}
+}
+
+@misc{rxnorm,
+  author       = {{U.S. National Library of Medicine}},
+  title        = {{RxNorm}},
+  howpublished = {\url{https://www.nlm.nih.gov/research/umls/rxnorm/index.html}},
+  year         = {2026}
+}
+
+@misc{loinc,
+  author       = {{Regenstrief Institute}},
+  title        = {Logical Observation Identifiers Names and Codes ({LOINC})},
+  howpublished = {\url{https://loinc.org/}},
+  year         = {2026}
+}
+
+@misc{hpo,
+  author       = {{The Human Phenotype Ontology}},
+  title        = {Human Phenotype Ontology ({HPO})},
+  howpublished = {\url{https://hpo.jax.org/}},
+  year         = {2026}
+}
+
+@misc{mondo,
+  author       = {{Monarch Initiative}},
+  title        = {Mondo Disease Ontology},
+  howpublished = {\url{https://mondo.monarchinitiative.org/}},
+  year         = {2026}
+}
+
+@misc{geneontology,
+  author       = {{The Gene Ontology Consortium}},
+  title        = {Gene Ontology},
+  howpublished = {\url{https://geneontology.org/}},
+  year         = {2026}
+}
+
+@misc{chebi,
+  author       = {{European Bioinformatics Institute}},
+  title        = {Chemical Entities of Biological Interest ({ChEBI})},
+  howpublished = {\url{https://www.ebi.ac.uk/chebi/}},
+  year         = {2026}
+}
+
+% ===================== Benchmarks =====================
+@article{luo2022biored,
+  author  = {Luo, Ling and others},
+  title   = {{BioRED}: a rich biomedical relation extraction dataset},
+  journal = {Briefings in Bioinformatics},
+  volume  = {23},
+  number  = {5},
+  pages   = {bbac282},
+  year    = {2022}
+}
+
+@misc{jin2021medqa,
+  author     = {Jin, Di and others},
+  title      = {What Disease Does This Patient Have? A Large-Scale Open Domain Question Answering Dataset from Medical Exams ({MedQA})},
+  year       = {2021},
+  eprint     = {2009.13081},
+  eprinttype = {arXiv},
+  note       = {Also Applied Sciences 2021}
+}
+
+@inproceedings{pal2022medmcqa,
+  author    = {Pal, Ankit and Umapathi, Logesh Kumar and Sankarasubbu, Malaikannan},
+  title     = {{MedMCQA}: A Large-scale Multi-Subject Multi-Choice Dataset for Medical Domain Question Answering},
+  booktitle = {Proc. Conf. Health, Inference, and Learning (CHIL)},
+  year      = {2022}
+}
+
+@inproceedings{jin2019pubmedqa,
+  author    = {Jin, Qiao and others},
+  title     = {{PubMedQA}: A Dataset for Biomedical Research Question Answering},
+  booktitle = {Proc. Conf. Empirical Methods in Natural Language Processing (EMNLP-IJCNLP)},
+  year      = {2019}
+}
+
+@article{singhal2023multimedqa,
+  author  = {Singhal, Karan and others},
+  title   = {Large language models encode clinical knowledge},
+  journal = {Nature},
+  volume  = {620},
+  pages   = {172--180},
+  year    = {2023}
+}
+
+@misc{bioasq2026,
+  author       = {{BioASQ}},
+  title        = {{BioASQ} Challenge},
+  howpublished = {\url{https://bioasq.org/home}},
+  year         = {2026}
+}
+
+@inproceedings{xiong2024mirage,
+  author    = {Xiong, Guangzhi and others},
+  title     = {Benchmarking Retrieval-Augmented Generation for Medicine ({MIRAGE})},
+  booktitle = {Findings of the Association for Computational Linguistics (ACL)},
+  year      = {2024}
+}
+
+@misc{markowitz2025kgllmbench,
+  author     = {Markowitz and others},
+  title      = {{KG-LLM-Bench}: A benchmark for knowledge graph comprehension by large language models},
+  year       = {2025},
+  eprint     = {2504.07087},
+  eprinttype = {arXiv},
+  note       = {Preprint}
+}
+
+@misc{xiao2025graphragbench,
+  author     = {Xiao and others},
+  title      = {{GraphRAG-Bench}: Evaluating graph retrieval-augmented generation},
+  year       = {2025},
+  eprint     = {2506.02404},
+  eprinttype = {arXiv},
+  note       = {Preprint}
+}
+
+@inproceedings{liu2026mhgraphbench,
+  author    = {Liu and others},
+  title     = {{MHGraphBench}: Mental-health knowledge graph reasoning benchmark},
+  booktitle = {Proc. GEM Workshop},
+  year      = {2026}
+}
+
+@inproceedings{sun2026clinicalinquiry,
+  author    = {Sun and others},
+  title     = {{ClinicalInquiryBench}: Evaluating clinically relevant follow-up question generation},
+  booktitle = {Findings of the Association for Computational Linguistics (EACL)},
+  year      = {2026}
+}
+
+@inproceedings{zuo2025medhallbench,
+  author    = {Zuo and Jiang},
+  title     = {{MedHallBench}: A benchmark for hallucination in medical large language models},
+  booktitle = {Proc. Machine Learning Research},
+  volume    = {281},
+  year      = {2025}
+}
+
+@inproceedings{kirubakaran2026bioconflict,
+  author    = {Kirubakaran and Gagnier},
+  title     = {{BioConflict}: Detecting and synthesizing conflicting biomedical evidence},
+  booktitle = {Proc. BioNLP Workshop},
+  year      = {2026}
+}
+
+@misc{yan2026livemedbench,
+  author     = {Yan and others},
+  title      = {{LiveMedBench}: Contamination-resistant dynamic clinical evaluation},
+  year       = {2026},
+  eprint     = {2602.10367},
+  eprinttype = {arXiv},
+  note       = {Preprint}
+}
+
+% ===================== Evaluation methodology =====================
+@inproceedings{bhojani2026biorag,
+  author    = {Bhojani and others},
+  title     = {A {BioRAG} ablation of retrieval strategies for faithfulness and context precision},
+  booktitle = {Proc. BioNLP Workshop},
+  year      = {2026}
+}
+
+@inproceedings{gao2023alce,
+  author    = {Gao, Tianyu and Yen, Howard and Yu, Jiatong and Chen, Danqi},
+  title     = {Enabling Large Language Models to Generate Text with Citations ({ALCE})},
+  booktitle = {Proc. Conf. Empirical Methods in Natural Language Processing (EMNLP)},
+  year      = {2023}
+}
+
+@inproceedings{es2024ragas,
+  author    = {Es, Shahul and others},
+  title     = {{RAGAS}: Automated Evaluation of Retrieval Augmented Generation},
+  booktitle = {Proc. Conf. European Chapter of the ACL: System Demonstrations},
+  year      = {2024}
+}
+
+@inproceedings{saadfalcon2024ares,
+  author    = {Saad-Falcon, Jon and others},
+  title     = {{ARES}: An Automated Evaluation Framework for Retrieval-Augmented Generation Systems},
+  booktitle = {Proc. Conf. North American Chapter of the ACL (NAACL)},
+  year      = {2024}
+}
+
+@inproceedings{mandarapu2026controlled,
+  author    = {Mandarapu and Kunkunuru},
+  title     = {A controlled study of {PrimeKG} retrieval on medical question answering},
+  booktitle = {arXiv preprint arXiv:2606.22419},
+  year      = {2026},
+  note      = {Preprint}
+}
+
+@inproceedings{elmofty2026ontology,
+  author    = {Elmofty and Leser},
+  title     = {Ontology retrieval versus unrestricted generation for rare-disease diagnosis},
+  booktitle = {Proc. BioNLP Workshop},
+  year      = {2026}
+}
+
+@inproceedings{nourbakhsh2026retrieval,
+  author    = {Nourbakhsh and others},
+  title     = {When Retrieval Does Not Help: A Multi-Model Study of Biomedical {RAG}},
+  booktitle = {Proc. BioNLP Workshop},
+  year      = {2026}
+}
+
+@article{ratajczak2022metapath,
+  author  = {Ratajczak, Florin and others},
+  title   = {Task-driven knowledge graph filtering improves prioritizing drug repurposing candidates},
+  journal = {Scientific Reports},
+  year    = {2022},
+  note    = {PMID 35246025}
+}
+
+@article{briere2026leakage,
+  author  = {Bri{\`e}re and others},
+  title   = {Train-test leakage in biomedical knowledge graph embedding evaluation},
+  journal = {bioRxiv},
+  year    = {2026},
+  note    = {Preprint, \url{https://www.biorxiv.org/content/10.1101/2025.01.23.634511v3}}
+}
+
+% ===================== Applications / clinical =====================
+@article{matsumoto2025escargot,
+  author  = {Matsumoto, Nicholas and others},
+  title   = {{ESCARGOT}: Large language model reasoning with executable graph-of-thought over biomedical knowledge graphs},
+  journal = {Bioinformatics},
+  volume  = {41},
+  number  = {2},
+  pages   = {btaf031},
+  year    = {2025}
+}
+
+% TODO camera-ready: confirm journal name and volume.
+@article{loaizabonilla2026trialmatch,
+  author  = {Loaiza-Bonilla, Arturo and others},
+  title   = {Transforming oncology clinical trial matching through neuro-symbolic, multi-agent {AI} and an oncology-specific knowledge graph: a prospective evaluation in 3804 patients},
+  journal = {ESMO Real World Data and Digital Oncology},
+  year    = {2026},
+  pubmed  = {42004487}
+}
+
+% ===================== Security / poisoning =====================
+@article{yang2024poisoning,
+  author  = {Yang and others},
+  title   = {Poisoning medical knowledge using large language models},
+  journal = {Nature Machine Intelligence},
+  year    = {2024},
+  doi     = {10.1038/s42256-024-00899-3}
+}
+
+@article{alber2025poisoning,
+  author  = {Alber, Daniel Alexander and others},
+  title   = {Medical large language models are vulnerable to data-poisoning attacks},
+  journal = {Nature Medicine},
+  year    = {2025},
+  doi     = {10.1038/s41591-024-03445-1}
+}
+
+@inproceedings{zou2025poisonedrag,
+  author    = {Zou, Wei and others},
+  title     = {{PoisonedRAG}: Knowledge Corruption Attacks to Retrieval-Augmented Generation of Large Language Models},
+  booktitle = {Proc. USENIX Security Symposium},
+  year      = {2025}
+}
+
+% ===================== Reporting standards / governance =====================
+@article{gallifant2025tripodllm,
+  author  = {Gallifant, Jack and others},
+  title   = {The {TRIPOD-LLM} reporting guideline for studies using large language models in health care},
+  journal = {Nature Medicine},
+  year    = {2025},
+  doi     = {10.1038/s41591-024-03425-5}
+}
+
+@article{collins2024tripodai,
+  author  = {Collins, Gary S. and others},
+  title   = {{TRIPOD+AI} statement: updated guidance for reporting clinical prediction models that use regression or machine learning methods},
+  journal = {BMJ},
+  volume  = {385},
+  pages   = {e078378},
+  year    = {2024}
+}
+
+@article{moons2025probastai,
+  author  = {Moons, Karel G. M. and others},
+  title   = {{PROBAST+AI}: an assessment tool for the risk of bias and applicability of prediction models using artificial intelligence},
+  journal = {BMJ},
+  volume  = {388},
+  pages   = {e082505},
+  year    = {2025}
+}
+
+@article{sounderajah2025stardai,
+  author  = {Sounderajah, Viknesh and others},
+  title   = {The {STARD-AI} reporting guideline for diagnostic accuracy studies of artificial intelligence},
+  journal = {Nature Medicine},
+  year    = {2025},
+  doi     = {10.1038/s41591-025-03953-8}
+}
+
+@article{vasey2022decideai,
+  author  = {Vasey, Baptiste and others},
+  title   = {Reporting guideline for the early-stage clinical evaluation of decision support systems driven by artificial intelligence ({DECIDE-AI})},
+  journal = {Nature Medicine},
+  volume  = {28},
+  pages   = {924--933},
+  year    = {2022}
+}
+
+@article{rivera2020spiritai,
+  author  = {Rivera, Samantha Cruz and others},
+  title   = {Guidelines for clinical trial protocols for interventions involving artificial intelligence: the {SPIRIT-AI} extension},
+  journal = {Nature Medicine},
+  volume  = {26},
+  pages   = {1351--1363},
+  year    = {2020}
+}
+
+@article{liu2020consortai,
+  author  = {Liu, Xiaoxuan and others},
+  title   = {Reporting guidelines for clinical trial reports for interventions involving artificial intelligence: the {CONSORT-AI} extension},
+  journal = {Nature Medicine},
+  volume  = {26},
+  pages   = {1364--1374},
+  year    = {2020}
+}
+
+@article{lekadir2025futureai,
+  author  = {Lekadir, Karim and others},
+  title   = {{FUTURE-AI}: international consensus guideline for trustworthy and deployable artificial intelligence in healthcare},
+  journal = {BMJ},
+  volume  = {388},
+  pages   = {e081554},
+  year    = {2025}
+}
+
+@misc{who2024lmm,
+  author       = {{World Health Organization}},
+  title        = {Ethics and governance of artificial intelligence for health: Guidance on large multi-modal models},
+  howpublished = {\url{https://www.who.int/publications/b/70584}},
+  year         = {2024}
+}
+
+@misc{fdacds2026,
+  author       = {{U.S. Food and Drug Administration}},
+  title        = {Clinical Decision Support Software: Guidance for Industry and FDA Staff},
+  howpublished = {\url{https://www.fda.gov/regulatory-information/search-fda-guidance-documents/clinical-decision-support-software}},
+  year         = {2026}
+}
+
+@misc{fdalifecycle2025,
+  author       = {{U.S. Food and Drug Administration}},
+  title        = {Artificial Intelligence-Enabled Device Software Functions: Lifecycle Management and Marketing Submission Recommendations},
+  howpublished = {\url{https://www.fda.gov/regulatory-information/search-fda-guidance-documents/artificial-intelligence-enabled-device-software-functions-lifecycle-management-and-marketing}},
+  year         = {2025}
+}
+
+@misc{fdapccp2025,
+  author       = {{U.S. Food and Drug Administration}},
+  title        = {Marketing Submission Recommendations for a Predetermined Change Control Plan for Artificial Intelligence-Enabled Device Software Functions},
+  howpublished = {\url{https://www.fda.gov/regulatory-information/search-fda-guidance-documents/marketing-submission-recommendations-predetermined-change-control-plan-artificial-intelligence}},
+  year         = {2025}
+}
+
+@misc{gmlp2025,
+  author       = {{IMDRF and U.S. FDA}},
+  title        = {Good Machine Learning Practice for Medical Device Development: Guiding Principles},
+  howpublished = {\url{https://www.fda.gov/medical-devices/software-medical-device-samd/good-machine-learning-practice-medical-device-development-guiding-principles}},
+  year         = {2025}
+}
+
+@misc{onchti1,
+  author       = {{U.S. Office of the National Coordinator for Health IT}},
+  title        = {{HTI-1} Decision Support Interventions Requirements},
+  howpublished = {\url{https://healthit.gov/test-method/decision-support-interventions/}},
+  year         = {2024}
+}
+
+@misc{euaiact2024,
+  author       = {{European Parliament and Council}},
+  title        = {Regulation ({EU}) 2024/1689 (Artificial Intelligence Act)},
+  howpublished = {\url{https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R1689}},
+  year         = {2024}
+}
+
+@misc{gdpr,
+  author       = {{European Parliament and Council}},
+  title        = {Regulation ({EU}) 2016/679 (General Data Protection Regulation)},
+  howpublished = {\url{https://eur-lex.europa.eu/eli/reg/2016/679/oj}},
+  year         = {2016}
+}
+
+@misc{nistgenai2024,
+  author       = {Autio and others},
+  title        = {Artificial Intelligence Risk Management Framework: Generative Artificial Intelligence Profile},
+  howpublished = {NIST AI 600-1, \url{https://www.nist.gov/publications/artificial-intelligence-risk-management-framework-generative-artificial-intelligence}},
+  year         = {2024}
+}
+
+@misc{hhsocr,
+  author       = {{U.S. HHS Office for Civil Rights}},
+  title        = {Guidance on Risk Analysis Requirements under the {HIPAA} Security Rule},
+  howpublished = {\url{https://www.hhs.gov/hipaa/for-professionals/security/guidance/final-guidance-risk-analysis/index.html}},
+  year         = {2026}
+}
+
+@misc{hl7fhir,
+  author       = {{HL7 International}},
+  title        = {{HL7 FHIR} Release 5},
+  howpublished = {\url{https://hl7.org/fhir/R5/}},
+  year         = {2023}
+}
+
+@misc{omop,
+  author       = {{OHDSI}},
+  title        = {{OMOP} Common Data Model},
+  howpublished = {\url{https://ohdsi.github.io/CommonDataModel/}},
+  year         = {2026}
+}
+
+@misc{prisma2020,
+  author       = {Page, Matthew J. and others},
+  title        = {The {PRISMA} 2020 statement: an updated guideline for reporting systematic reviews},
+  howpublished = {\url{https://www.prisma-statement.org/prisma-2020}},
+  year         = {2021}
+}

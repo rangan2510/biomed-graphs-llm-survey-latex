@@ -1,0 +1,83 @@
+\documentclass[journal]{IEEEtran}
+
+% ---- Packages ----
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{tabularx}
+\usepackage{url}
+\usepackage{xcolor}
+\usepackage[hidelinks]{hyperref}
+
+% TikZ for figures
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,shapes.geometric,fit,calc,backgrounds}
+
+% ORCID iDs in the author block. IEEEtran has no native provision for these,
+% and orcidlink is the usual way IEEE authors add them: it draws the green
+% logo and hyperlinks it to the ORCID record. Must follow hyperref and tikz.
+\usepackage{orcidlink}
+
+% Bibliography (biber/biblatex, numeric)
+\usepackage[backend=biber, style=numeric, sorting=none]{biblatex}
+\addbibresource{references.bib}
+
+% Equalize the two columns on the final page
+\usepackage{balance}
+
+% A compact column type for two-column-spanning tables
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+
+% Breathing room between table rows. extrarowheight is what works for the
+% paragraph columns used below; arraystretch alone does not, since row height
+% there comes from the wrapped text rather than from a strut.
+\setlength{\extrarowheight}{3.5pt}
+\renewcommand{\arraystretch}{1.12}
+
+\hyphenation{bio-medical know-ledge}
+
+\begin{document}
+
+\title{Biomedical Knowledge Graphs and Large Language Models: A Critical Engineering Survey}
+
+\author{Rangan~Das~\orcidlink{0000-0001-6867-6136},
+        Sounak~Ghosh,
+        Sushmit~Dasgupta,
+        Utsav~Bandyopadhyay~Maulik,
+        Ujjwal~Maulik,~\IEEEmembership{Fellow,~IEEE,}
+        and~Sanghamitra~Bandyopadhyay,~\IEEEmembership{Fellow,~IEEE}% <-this % stops a space
+\thanks{R. Das, S. Ghosh, S. Dasgupta, and U. Maulik are with the Department of Computer Science and Engineering, Jadavpur University, Kolkata, West Bengal, India (e-mail: rangan@live.in).}% <-this % stops a space
+\thanks{U. B. Maulik is with the School of Computing, National University of Singapore, Singapore (e-mail: utsavbmaulik@u.nus.edu).}% <-this % stops a space
+\thanks{S. Bandyopadhyay is with the Machine Intelligence Unit, Indian Statistical Institute, Kolkata, West Bengal, India.}% <-this % stops a space
+\thanks{This is an invited survey for \emph{Artificial Intelligence Science and Engineering}.}}
+
+\markboth{Artificial Intelligence Science and Engineering, 2026}%
+{Das \MakeLowercase{\textit{et al.}}: Biomedical Knowledge Graphs and Large Language Models: A Critical Engineering Survey}
+
+\maketitle
+
+\input{sections/00-frontmatter.tex}
+\input{sections/01-introduction.tex}
+\input{sections/04-prior-surveys.tex}
+\input{sections/02-scope.tex}
+\input{sections/03-foundations.tex}
+\input{sections/05-taxonomy.tex}
+\input{sections/06-kg-to-llm.tex}
+\input{sections/07-llm-to-kg.tex}
+\input{sections/08-bidirectional.tex}
+\input{sections/09-resources.tex}
+\input{sections/10-enables.tex}
+\input{sections/10-evaluation.tex}
+\input{sections/11-applications.tex}
+\input{sections/13-governance.tex}
+\input{sections/14-agenda.tex}
+\input{sections/15-conclusion.tex}
+
+\balance
+\printbibliography
+
+\end{document}

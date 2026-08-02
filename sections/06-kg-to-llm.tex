@@ -1,0 +1,54 @@
+\section{KG-to-LLM Methods: From Retrieved Facts to Controlled Generation}
+\label{sec:kgtollm}
+
+The KG-to-LLM direction is the most visible part of the literature, and the label hides several different things. The graph may be turned into text, traversed as a symbolic tool, compressed into learned representations, used to supervise training, or consulted after the answer is written. These fix different bottlenecks. Pooling them as one method is how the field ends up arguing about whether ``KG-RAG works.'' Fig.~\ref{fig:archblocks} reduces four of the recurring designs to their essential blocks.
+
+\input{sections/fig-archblocks.tex}
+
+\subsection{Serializing the graph into the prompt}
+
+The simplest interface retrieves a subgraph and drops a text rendering of it into the prompt. The appeal is modularity. The graph store and the model can be swapped independently, and whatever was retrieved can be logged. The difficulty is organization. One-hop expansion grows fast around a high-degree concept such as \emph{neoplasm}, and an unordered list of triples hides which relations form a path.
+
+Three systems mark out the design space. SPOKE-based KG-RAG prunes hard, using prompt-aware extraction and embedding-based selection to cut token use by more than half with no loss on the tested tasks~\cite{soman2024kgrag}. That is efficient evidence packaging, not proof that the model reasons symbolically. MindMap asks the model to emit a graph-like structure before it answers, which helps inspection~\cite{wen2024mindmap}. But an emitted path is still model output. It becomes a faithful trace only when each edge links back to something retrieved. ILlama precomputes UMLS triple documents and retrieves over those, which moves graph expansion off the latency-critical path~\cite{park2025illama}. The cost is rigidity: change the graph and the derived corpus has to be rebuilt.
+
+The shared lesson concerns what survives compression. Serialization suits small subgraphs where provenance must stay visible and the model may be replaced. It fails when topology carries the task signal, when many parallel paths must be compared, or when qualifiers cannot survive being turned into prose, because a verbalized triple can quietly upgrade an association into a cause. A fair evaluation compares at least three organizers, unordered triples, explicit paths, and source passages, under one token budget.
+
+\subsection{Letting the model write the query}
+
+Instead of shipping a neighborhood to the model, a system can have the model write a formal query. This buys exact filters, relation constraints, and joins, and it keeps the graph current without retraining. Federated bioinformatics work retrieves schemas and example queries to generate SPARQL, validates, and attempts repair on failure~\cite{emonet2024sparql}, and BioChatter exposes graph schemas to conversational models over BioCypher graphs~\cite{lobentanzer2024biochatter}.
+
+Both illustrate the same limit: execution feedback catches a malformed query and cannot catch a valid query that encodes the wrong intent. Query generation therefore needs three separate checks. Syntactic executability and schema validity come free from the database. Semantic fidelity to the question does not, and testing it requires gold query intent alongside adversarial synonyms, negation, temporal constraints, and ambiguous concepts. For patient data there is a fourth requirement that is easy to miss: access control has to run before execution, because a correct query can still return records the user may not see.
+
+\subsection{Path and subgraph retrieval}
+
+Path methods exploit entity types, clinical context, and path semantics, and the four most instructive systems fail in four different ways.
+
+KRAGEN decomposes a question through graph-of-thought prompting and retrieves per subproblem~\cite{matsumoto2024kragen}. The decomposition helps, and it commits early: if the first plan misses the decisive mechanism, later retrieval cannot recover it, which makes plan diversity and recovery from empty retrieval more informative than final accuracy. DR.KNOWS ranks candidate UMLS paths with a graph isomorphism network and iterates toward diagnosis concepts, reporting gains on MIMIC-III and an institutional dataset; its error analysis names incorrect starting concepts as a recurring cause~\cite{zuo2025drknows}, which is the clearest available demonstration that entity linking belongs inside the model rather than in preprocessing. medIKAL merges an initial model diagnosis with graph search and reranks paths~\cite{jia2025medikal}, recovering diseases absent from the retrieved paths while blurring attribution, since an answer may come from the graph, the initial guess, or their interaction. HyKGE inverts the order, generating a hypothesis first and using it to steer exploration~\cite{jiang2025hykge}, which handles underspecified questions and invites confirmation bias, because a wrong hypothesis steers retrieval toward paths that support it.
+
+At the molecular scale, KGRxn-LLM does something the clinical papers should copy: its benchmark separates questions whose answers the graph covers from held-out questions requiring generalization beyond it~\cite{liu2026kgrxn}. Reporting one aggregate score over both conflates retrieval competence with generalization.
+
+Across all of these, retrieval has three independent ceilings: correct seed concepts, adequate coverage, and an effective search policy. Adding hops addresses only the third and usually worsens noise and cost. A comparison that does not report coverage conditional on each ceiling, with oracle-seed and oracle-path upper bounds, cannot say which ceiling it hit.
+
+\subsection{Community, hierarchy, and hybrid retrieval}
+
+Path retrieval answers local questions and struggles with broad ones. Community methods, following the pattern set for query-focused summarization~\cite{edge2024graphrag}, give the retriever something to return when no single path decides the answer.
+
+KARE detects hierarchical communities over a multi-source concept graph, retrieves patient-relevant ones, and distills reasoning traces into a smaller model, reporting gains on mortality and readmission prediction~\cite{jiang2025kare}. Because it couples community indexing, patient-context augmentation, trace distillation, and prediction, the gain cannot be attributed to topology without ablating each, and its label-derived traces need a leakage check, since the expert model sees ground-truth outcomes during training-sample construction. MedRAG takes the opposite approach and shapes the hierarchy to the task, encoding discrimination among diseases with overlapping presentations rather than generic similarity~\cite{zhao2025medrag}; the design is clinically apt and correspondingly narrow, and its private evaluation limits replication. MedGraphRAG links user documents to controlled terminology and authoritative sources, combining precise and broad retrieval~\cite{wu2025medgraphrag}, which answers a real weakness of pure graph retrieval: edges identify relationships while passages retain the qualifiers.
+
+Together they imply a routing principle rather than a winner. Paths suit relation-specific and mechanistic questions, communities suit synthesis and patient-context enrichment, and hybrid graph-and-text packets suit anything where qualifiers or citation entailment matter. One retriever need not serve every question, though a router's own errors then need measuring.
+
+\subsection{Fusing graph structure into the model}
+
+Textual retrieval keeps evidence inspectable and spends context. Representation-level methods project structure into the model's latent space instead.
+
+BioBridge learns graph-supervised transformations between independently trained foundation models without fine-tuning the encoders, supporting cross-modal retrieval~\cite{wang2024biobridge}, which establishes that a graph can supervise mappings between modalities rather than merely store text. MEG projects graph embeddings into an instruction-tuned model through a learned projection, gaining on four medical multiple-choice datasets~\cite{cabello2024meg}. MedCo runs the coupling in both directions, building a medical-code graph from EHR associations and type-constrained inferred relations, then jointly training a LoRA-tuned encoder with a heterogeneous GNN~\cite{kerdabadi2026medco}. MedKInstruct moves the graph from inference-time context to training-time supervision, using graph paths to synthesize visual question-answer pairs and reward path consistency~\cite{wu2026medkinstruct}.
+
+The common cost is attribution. A projected vector is not a citation, and a model can exploit correlations encoded in an embedding without exposing the supporting path. MedCo's generated rationales are training signals rather than evidence, and MedKInstruct's instruction synthesis opens a leakage route, since benchmark answers present in the graph can be reproduced without attending to the image. Deep coupling earns its place when latency or context rules out explicit evidence, or when the task needs cross-modal alignment. It does not replace retrieval when someone has to name the source behind a clinical claim.
+
+\subsection{Verifying after generation}
+
+The last family separates fluent generation from acceptance, and it contains the strongest safety argument in this literature.
+
+KGARevion has the model propose query-relevant triples, then checks them against a grounded graph and generates only from what survives~\cite{su2025kgarevion}. Parametric knowledge raises recall while the graph keeps authority, and the ceiling is graph completeness, since a true but absent candidate is rejected. ``Verified'' therefore means supported by this snapshot, not true. CrossDDI goes further and removes the model from arbitration entirely, issuing a positive drug-interaction verdict only on explicit supporting evidence, which reduced variation across three backbones while exposing evidence acquisition as the binding constraint~\cite{wang2026crossddi}.
+
+The distinction that matters is between generative explanation, graph consistency, and evidence entailment. A response can satisfy graph consistency and cite nothing, and a cited source can fail to entail the sentence attached to it. VERICITE found sentence-level support for only 27 to 41\% of citation pairs at common retrieval depths, and supplying gold documents improved answers more than citations, which locates the problem in generation rather than retrieval~\cite{ma2026vericite}. A system reporting a single ``verified'' flag is not measuring any of the three separately.

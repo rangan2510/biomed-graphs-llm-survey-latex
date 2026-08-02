@@ -1,0 +1,106 @@
+\section{Applications and the Maturity of Their Evidence}
+
+Biomedical KG--LLM systems get grouped under one label even though their uses span very different evidence and risk regimes. A system that proposes a drug--gene association for laboratory follow-up is not the same as one that recommends a diagnosis from an EHR, and neither is the same as a patient-facing assistant. The first produces a research hypothesis, the second can shape professional judgment, and the third can change patient behavior directly. Application claims should therefore be read alongside the intended user, the decision consequence, the evidence maturity, and the degree of human control.
+
+\subsection{Scientific discovery and hypothesis generation}
+
+The most natural use of biomedical KGs is to organize heterogeneous evidence across genes, proteins, pathways, phenotypes, diseases, drugs, publications, and trials. LLMs extend this in two directions: they extract candidate entities, relations, and qualifiers from the literature, and they turn graph neighborhoods or paths into hypotheses a researcher can inspect. The graph supplies an explicit search space while the LLM lowers the cost of schema-constrained extraction and natural-language interpretation.
+
+MDKG illustrates the construction direction. Gao et al.~\cite{gao2025mdkg} combined GPT-assisted pre-annotation and triplet refinement with active learning, named-entity recognition, relation extraction, expert review, and fusion of curated databases. The resource holds more than ten million relations and attaches conditional statements, study-population characteristics, source information, and confidence metadata to literature-derived assertions. Four experts assessed sampled triplets and reported a correctness score of 0.79, and graph-derived representations improved retrospective prediction in UK Biobank experiments. Two lessons generalize beyond the resource. Contextual qualifiers and provenance should be first-class data, not discarded when sentences become triples. And scale does not replace validation: almost one million associations absent from the source databases are candidates, not established facts.
+
+Reasoning agents run the opposite direction, treating the KG as an external computational substrate. Matsumoto et al.~\cite{matsumoto2025escargot} introduced ESCARGOT, which combines executable graph-of-thought planning with biomedical graph queries and reported gains over conventional RAG on open-ended questions. Such systems make tool calls and retrieved facts inspectable, but an inspectable trace is not automatically a faithful scientific explanation. A plausible path can reflect confounding, source duplication, extraction error, or a merely associative edge. The appropriate output is a ranked, provenance-linked hypothesis with explicit uncertainty and a proposed validation experiment, not a claim that a mechanism or treatment effect is established. For drug discovery and repurposing the evidentiary chain should be explicit: computational association, then independent corroboration, then expert prioritization, then experimental validation, then preclinical validation, then clinical evaluation. Most studies stop at one of the first three stages, so a survey should report downstream wet-lab or clinical validation separately and should not call an untested graph prediction a discovery.
+
+\subsection{Information access, evidence synthesis, and question answering}
+
+Graph-grounded question answering is the most visible application family, covering consumer health information, professional retrieval, literature synthesis, fact checking, guideline navigation, and explanation of relationships. The graph can support entity normalization, query expansion, multi-hop retrieval, relation-aware reranking, and evidence organization before generation. Wu et al.~\cite{wu2025medgraphrag} evaluated MedGraphRAG across nine medical QA benchmarks, two fact-checking datasets, and long-form generation, connecting user documents to controlled concepts and authoritative sources through combined top-down and bottom-up retrieval. This is a meaningful advance over flat passage retrieval, but the evidence stays benchmark-level: medical QA scores do not show whether clinicians retrieve the right evidence under time pressure, whether cited passages entail each claim, or whether use changes decisions safely.
+
+The distinction between answer quality and evidence quality is essential. A system can give a correct answer from unsupported internal knowledge. It can give a wrong answer despite retrieving the right evidence. It can give a fluent answer whose citations do not support its claims. Evaluation therefore has to separate four things: retrieval coverage, source quality, claim-to-evidence entailment, and final-answer correctness. Showing sources is not grounding, and a graph path is not an explanation.
+
+Information-access systems suit staged deployment, because their first job can be retrieval rather than recommendation. A low-risk first interface returns an evidence packet: normalized concepts, dated sources, supporting and conflicting passages, and the graph paths between them. No treatment recommendation, no synthesis. Generation gets added later, once retrieval quality and citation faithfulness have been validated. Staging also makes failure easier to localize, since an error in the packet is visibly a retrieval error rather than a reasoning one.
+
+\subsection{EHR-based diagnosis, prognosis, and decision support}
+
+EHR applications promise context-specific reasoning and face the hardest combination of problems: poor data quality, temporal complexity, privacy, and workflow risk. Two strategies dominate. One turns a patient record into graph-linked concepts and retrieves disease-centered paths. The other retrieves patient-relevant graph communities and uses them as context for prediction. DR.KNOWS takes the first route, mapping concepts in clinical notes to UMLS and ranking knowledge trajectories toward a diagnosis~\cite{zuo2025drknows}. medIKAL adds typed entity weighting and path reranking, and merges an initial model diagnosis with graph search~\cite{jia2025medikal}. KARE takes the second route, using hierarchical communities to enrich patient representations for mortality and readmission prediction~\cite{jiang2025kare}.
+
+These studies show that graph structure can add useful inductive bias and patient-specific context. They do not establish clinical effectiveness. MIMIC experiments are retrospective and largely single-center, and a new EHR benchmark is not an external validation just because its records came from real practice. The graph also opens new leakage routes. If an answer label, a diagnosis code, a future event, or an edge closely derived from one sits in the snapshot, good performance may reflect access to the target rather than clinical reasoning. A temporal split has to lock all of it: the record, the literature, the terminology releases, and the graph snapshot.
+
+Then there is the harder problem, which is that clinical meaning lives in the qualifiers. Consider what the triples \emph{(patient, has\_condition, disease)} and \emph{(drug, treats, disease)} throw away. The source may have said ``family history of,'' or ``ruled out,'' or ``previously treated,'' or ``contraindicated in pregnancy,'' or ``supported only in a biomarker-defined subgroup.'' Each of those changes the clinical answer. A patient graph therefore needs to model assertion status, who the statement is about, the time interval, the source, and the confidence. A global graph needs to keep population and evidence qualifiers. Without them, a retrieval can be technically perfect and clinically wrong.
+
+\subsection{Cohort identification and clinical-trial matching}
+
+Trial matching fits neuro-symbolic architectures well, because eligibility combines free text with exact constraints on diagnoses, biomarkers, prior therapies, laboratory values, performance status, geography, and time. LLMs can extract and normalize evidence from records and protocols, graphs can link synonyms, therapies, variants, diseases, sites, and trials, and deterministic components can evaluate numeric, Boolean, and temporal rules.
+
+The strongest clinical-stage evidence in the recent corpus is the prospective evaluation by Loaiza-Bonilla et al.~\cite{loaizabonilla2026trialmatch}. Their oncology platform combined domain-specific LLM agents, an oncology KG, deterministic eligibility reasoning, a recommendation engine, and oncologist review. Across 3{,}804 prospectively screened patients it processed 23{,}912 candidate patient--trial pairs and reached an F1 of 0.82, against 0.47 for a GPT-4 zero-shot baseline and 0.67 for a GPT-4 chain-of-thought baseline. Median screening time fell from about 120 minutes for manual review to about 30 minutes including clinical verification, and the study reported calibration, ablations, and subgroup analyses. This moves beyond offline benchmarking, and its limits define the next threshold. The unit of evaluation was eligibility classification, not enrollment, participation, survival, or patient-reported outcome. Cases needing clinician judgment were excluded from the binary F1, and rare biomarker combinations, temporal criteria, and incomplete extraction remained error sources. The platform was proprietary and several authors were affiliated with its developer. Independent multisite replication, comparison with the existing screening workflow, prospective error surveillance, and measurement of actual enrollment and equity effects are still needed, so the study supports clinician-supervised operational feasibility rather than patient benefit.
+
+\subsection{Patient-facing systems}
+
+Patient-facing advice is the highest-risk application, because users may act without professional mediation, may disclose sensitive information, and may be unable to judge whether an answer is well grounded. The WHO guidance on large multimodal models in health identifies patient-guided use as a major application while warning about inaccurate, biased, incomplete, and overly authoritative output and automation bias~\cite{who2024lmm}. A KG can improve source access and terminology control, but it does not resolve these risks, and it can make advice look more authoritative than the evidence warrants. Deployment should be bounded by intended use: educational explanations, service navigation, and preparing questions for a clinician differ from diagnosis, triage, medication adjustment, or treatment selection. Higher-risk functions need conservative scope limits, explicit emergency escalation, calibrated abstention, age- and literacy-appropriate communication, claim-level sources, privacy-preserving interaction, and an accessible route to human care. Evidence from clinician-facing or exam-style QA does not transfer here without direct usability and safety evaluation in the intended patient population.
+
+\subsection{Cross-application synthesis}
+
+Table~\ref{tab:apps} summarizes the graph's contribution, the appropriate near-term output, and the evidence required before stronger claims for each application. The cross-cutting conclusion is conditional. Graphs help most when a task genuinely depends on typed relations, normalization, multi-hop structure, or computable constraints. They may add little when a current, authoritative passage answers the question directly, and they can hurt when coverage is poor, mappings are wrong, or retrieved subgraphs fill the context window without adding decisive evidence. Application evaluation must therefore include a matched text-retrieval baseline and must report when the graph is bypassed or adds no value.
+
+\subsection{How mature is the evidence?}
+\label{sec:maturity}
+
+Words like ``clinical,'' ``real-world,'' and ``validated'' are used loosely enough across this literature that application claims are hard to compare at all. The ladder in Fig.~\ref{fig:maturity} grades the evaluation rather than the ambition, so a study can address a clinical task and still sit near the bottom of it. E0 is a concept with no systematic evaluation. E1 is an offline benchmark with a locked test set, comparators, and ablations, which says something about the dataset and nothing about generalization. E2 adds external retrospective validation on an independent period, site, or population. E3 is a prospective silent deployment on live data with outputs hidden from users. E4 is clinician-in-the-loop feasibility with predefined oversight. E5 is a comparative study measuring workflow, decisions, safety, or outcomes. E6 is governed routine use, sustained by monitoring, change control, and revalidation.
+
+\begin{figure}[!t]
+\centering
+\begin{tikzpicture}[
+  font=\scriptsize,
+  mstep/.style={rectangle, rounded corners=2pt, draw=black!70,
+               text width=66mm, align=left, minimum height=6mm, inner sep=3pt},
+  e0/.style={mstep, fill=green!4},
+  e1/.style={mstep, fill=green!8},
+  e2/.style={mstep, fill=green!14},
+  e3/.style={mstep, fill=green!20},
+  e4/.style={mstep, fill=green!26},
+  e5/.style={mstep, fill=green!34},
+  e6/.style={mstep, fill=green!44},
+  node distance=2.2mm
+]
+\node[e0] (e0) {Concept: prototype, no systematic evaluation};
+\node[e1, above=of e0] (e1) {Offline benchmark: locked test, comparators, ablations};
+\node[e2, above=of e1] (e2) {External retrospective: independent time, site, population};
+\node[e3, above=of e2] (e3) {Prospective silent: live data, outputs hidden from users};
+\node[e4, above=of e3] (e4) {Live feasibility: clinician in the loop, oversight};
+\node[e5, above=of e4] (e5) {Comparative impact: workflow, decisions, outcomes};
+\node[e6, above=of e5] (e6) {Governed routine use: monitoring, change control, rollback};
+\draw[-{Stealth[length=2mm]}, thick] ($(e0.south east)+(4mm,-1mm)$) -- ($(e6.north east)+(4mm,1mm)$)
+  node[midway, right, rotate=90, anchor=north, yshift=-2mm]{increasing evidence};
+\end{tikzpicture}
+\caption{\textbf{Evidence maturity: how far a system's evaluation is from real clinical use.} The ladder grades the evidence, not the ambition, so a paper can target a clinical task and still sit near the bottom. E0 is a working prototype with no systematic evaluation. E1 is an offline benchmark with a locked test set and ablations, which supports a claim about that dataset and none about generalization. E2 repeats the evaluation on an independent time period, site, or population, testing whether the result travels. E3 runs the system on live data in the real workflow with its outputs hidden from users, which surfaces latency, missing documents, and terminology drift that a benchmark cannot. E4 shows the output to clinicians under predefined oversight, testing whether it can be used safely. E5 asks the harder question of whether using it changes decisions or outcomes. E6 is routine use sustained by monitoring, change control, and revalidation, which is an operating state rather than a certificate. The distribution of the reviewed literature is the point of the figure: most systems sit at E1, the single prospective clinical study reaches E4 for one screening workflow, and nothing in the corpus reaches E5.}
+\label{fig:maturity}
+\end{figure}
+
+Each step tests something the one below it could not, which is why progression is not a matter of accumulating more of the same evidence. A system that excels on a locked benchmark can fail in silent deployment because local terminology mapping, document availability, latency, or evidence freshness differ from the benchmark environment, and none of those were under test before. A system that clears silent deployment can still increase workload or invite misplaced reliance once clinicians see its output, because accuracy and usability are different properties. Treating a step as a formality is the common failure: freezing the configuration, running matched comparators, and using temporal rather than random splits are what make the move from benchmark to external validation mean anything. Detailed gate criteria are in the supplementary material~\cite{supplementary}.
+
+Placing the reviewed work on this ladder is sobering. KARE, medIKAL, DR.KNOWS, MedGraphRAG, and most of their peers sit at E1. The oncology trial-matching study reaches E4 for one defined screening workflow, because clinicians reviewed live recommendations, and it does not demonstrate patient outcomes~\cite{loaizabonilla2026trialmatch}. Nothing in the corpus reaches E5. The field therefore has substantial algorithmic promise and very little clinical-effectiveness evidence, and abstracts should say so.
+
+The top of the ladder is not a certificate either. Governed routine use is an operating state, held only while monitoring, change control, and revalidation continue, so a system that stops meeting those conditions has left the level whatever its original evaluation showed.
+
+\subsection{What a KG--LLM study should report}
+
+No single reporting guideline covers an adaptive KG--LLM system, and the established instruments are named in Section~\ref{sec:failure}. What matters here is what those guidelines do not ask for, because they predate graph-grounded generation. A study should additionally report the graph schema and snapshot identifier, the retrieval corpus and configuration, the serialization used in the prompt, the tool policy, the evidence-verification path, the ablations that isolate the graph effect, terminology releases and mapping versions, the leakage analysis, graph-coverage strata over the evaluation set, and the exact model identifier with its access date. Together these define the intervention that was evaluated, which is why the configuration tuple of Section~\ref{sec:failure} is a reporting requirement rather than an operational convenience.
+
+Measured performance also belongs to the human-machine team rather than the model alone, which makes the interface an experimental variable. Useful transparency exposes the basis for verification, not a narrative of how the model supposedly reasoned: the patient facts used, their dates and assertion status, the concepts they mapped to, the retrieved sources with version and date, any material conflict, and the confidence or abstention status. Oversight has to be designed and measured rather than asserted, since adding an accept button transfers liability without establishing review. If a user cannot evaluate the basis of a recommendation in the time available, the human-in-the-loop control is nominal.
+
+\begin{table*}[!t]
+\centering
+\caption{\textbf{What the graph contributes in each application area, what such a system can defensibly output today, and what evidence a stronger claim would require.} The applications differ less in technique than in what a mistake costs. A drug--gene association proposed for laboratory follow-up is a hypothesis a researcher will test; a diagnosis suggested from a patient record can shape professional judgment; advice given directly to a patient may be acted on with no clinician in between. The middle column is therefore deliberately conservative, naming the output that current evidence supports rather than the one the technique could eventually produce, and the right column names what is missing. The pattern across rows is that graphs help most where a task genuinely turns on typed relations, normalization, or computable constraints, and least where a single current authoritative passage would answer the question directly.}
+\label{tab:apps}
+\footnotesize
+\begin{tabularx}{\textwidth}{@{}L{2.6cm} Y Y Y@{}}
+\toprule
+\textbf{Application} & \textbf{Graph contribution} & \textbf{Appropriate near-term output} & \textbf{Evidence before stronger claims} \\
+\midrule
+Knowledge construction & Normalization, structure, qualifiers, provenance & Quarantined candidate assertions for curation & Relation-level validation, inter-rater reliability, source-stratified error analysis \\
+Discovery and repurposing & Multi-hop hypothesis space and evidence linkage & Ranked hypothesis with provenance and validation plan & Independent replication, wet-lab or preclinical confirmation, prospective utility \\
+Literature and guideline access & Concept expansion, retrieval, conflict organization & Evidence packet with dated supporting and conflicting sources & Retrieval recall, citation entailment, temporal freshness, clinician task evaluation \\
+Diagnosis and prognosis & Patient-to-concept mapping, disease paths, community context & Clinician-facing differential or risk estimate with abstention & Temporal/external validation, calibration, subgroup performance, silent then prospective deployment \\
+Trial matching & Ontology normalization and deterministic eligibility constraints & Candidate trials plus criterion-level evidence for expert review & Prospective multisite accuracy, operational impact, enrollment, equity analysis \\
+Patient communication & Terminology control and authoritative source retrieval & Bounded education and navigation & Patient safety, comprehension, reliance, accessibility, escalation, outcomes \\
+\bottomrule
+\end{tabularx}
+\end{table*}

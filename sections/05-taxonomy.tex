@@ -1,0 +1,77 @@
+\section{A Multidimensional Engineering Taxonomy}
+
+\subsection{Axis 1: direction of knowledge flow}
+
+The familiar directional split is still a good entry point. In \emph{KG$\rightarrow$LLM} systems the graph supplies knowledge, structure, constraints, training signals, or verification to an LLM. In \emph{LLM$\rightarrow$KG} systems the model extracts, normalizes, completes, aligns, repairs, summarizes, or updates a graph. In \emph{bidirectional} systems the two alternate, sometimes writing reviewed outputs back to the graph. Direction describes what flows, not how, so it should never be the only label.
+
+\subsection{Axis 2: lifecycle stage}
+
+Systems may couple at source acquisition, graph construction, normalization, storage, indexing, query interpretation, retrieval, reasoning, generation, verification, user interaction, or monitoring. The stage changes the claim. An LLM used to normalize synonyms can improve graph coverage but does not directly ground a downstream answer. A KG consulted only after generation can catch contradictions but does not guide the initial reasoning. A system is best described by a lifecycle signature rather than a single tag.
+
+\subsection{Axis 3: coupling depth}
+
+We distinguish six coupling levels, shown in Fig.~\ref{fig:coupling}. \emph{C0, co-presence}: the graph and LLM share an application but exchange no structured information; this is not substantive integration. \emph{C1, prompt or interface coupling}: triples, paths, summaries, or query results enter a prompt, or the LLM emits a graph query; flexible and auditable, but sensitive to rendering and context limits. \emph{C2, iterative tool coupling}: the LLM plans, calls graph tools, observes results, and revises; more adaptive, but with trajectory and agent-control risk. \emph{C3, representation coupling}: graph embeddings, GNN outputs, graph tokens, or adapters fuse with language representations; compact, but harder to attribute and update. \emph{C4, objective or parameter coupling}: graph-derived examples, paths, constraints, or contrastive objectives change the weights; can improve internal behavior, but weakens source-level traceability and selective updating. \emph{C5, constrained or closed-loop coupling}: the graph constrains decoding or verifies output, and outputs may trigger controlled graph revision; stronger control only when the verifier is independent and updates are quarantined.
+
+Coupling depth is not a quality ranking. C1 may be preferable when auditability and fast knowledge updates matter. C3 and C4 may win on latency or high-volume prediction. C5 can be the safest or the most dangerous option depending on its update controls.
+
+\begin{figure}[!t]
+\centering
+\begin{tikzpicture}[
+  font=\scriptsize,
+  lvl/.style={rectangle, rounded corners=2pt, draw=black!70,
+              text width=68mm, align=left, minimum height=6.5mm, inner sep=3pt},
+  c0/.style={lvl, fill=blue!3},
+  c1/.style={lvl, fill=blue!7},
+  c2/.style={lvl, fill=blue!12},
+  c3/.style={lvl, fill=blue!18},
+  c4/.style={lvl, fill=blue!24},
+  c5/.style={lvl, fill=blue!30},
+  node distance=2.2mm
+]
+\node[c0] (c0) {Co-presence: no structured exchange};
+\node[c1, below=of c0] (c1) {Prompt or interface: triples and queries in the prompt};
+\node[c2, below=of c1] (c2) {Iterative tool use: plan, call, observe, revise};
+\node[c3, below=of c2] (c3) {Representation: embeddings or adapters fused};
+\node[c4, below=of c3] (c4) {Objective: graph-derived signal alters weights};
+\node[c5, below=of c4] (c5) {Constrained or closed-loop: decoding plus write-back};
+\draw[-{Stealth[length=2mm]}, thick] ($(c0.north west)+(-4mm,1mm)$) -- ($(c5.south west)+(-4mm,-1mm)$)
+   node[midway, left, rotate=90, anchor=south, yshift=2mm]{deeper coupling};
+\end{tikzpicture}
+\caption{\textbf{Coupling depth: how tightly a knowledge graph and a language model are joined.} Depth describes where in the system the two components exchange information, not how much knowledge flows. At C0 they share an application but pass nothing structured to each other, which we include only to mark the boundary of genuine integration. At C1 the graph reaches the model as text in the prompt, or the model emits a query; evidence stays inspectable, and results depend heavily on how triples are rendered and on the context budget. At C2 the model calls graph tools in a loop, observing results and revising, which adds adaptivity and the risk of runaway trajectories. At C3 graph embeddings or adapters are fused into the model's representations, and at C4 graph-derived signal changes the weights themselves; both buy speed and compactness but give up source-level attribution, because a projected vector is not a citation. At C5 the graph constrains decoding and may receive reviewed write-back, which is the tightest control available when the verifier is independent and updates are quarantined, and the largest hazard when they are not. Depth is not a quality ranking. Shallow coupling is preferable when a clinician must audit each claim; deep coupling is preferable when latency or throughput dominates.}
+\label{fig:coupling}
+\end{figure}
+
+\subsection{Axis 4: knowledge object}
+
+The graph object may be an ontology or terminology graph, a curated factual or evidence graph, a literature-derived assertion graph, a molecular or drug--disease graph, a patient-specific longitudinal graph, a multimodal graph linking text, images, omics, and clinical events, a task-local graph built from retrieved documents, or a community or summary graph derived from a larger resource. This axis explains why a method validated on an open molecular graph cannot transfer uncritically to a private patient graph. The former emphasizes scientific evidence and link-prediction validity; the latter adds privacy, missingness, coding drift, and workflow consequences.
+
+\subsection{Axis 5: evidence maturity and clinical risk}
+
+We classify evidence from E0 (conceptual) through E6 (routine monitored deployment), defined in Section~\ref{sec:maturity}. Clinical risk is graded separately by intended use: research support, administrative or informational support, clinician-facing recommendation, or patient-facing decision influence. A high-performing E1 prototype aimed at a high-risk use is still immature.
+
+\subsection{Taxonomy in practice}
+
+Table~\ref{tab:taxonomy} expresses common method families along these axes, together with their primary benefit and their principal failure mode. The rest of the survey uses this taxonomy to compare methods while keeping the distinctions that decide reliability.
+
+\begin{table*}[!t]
+\centering
+\caption{\textbf{The common method families, placed on all five classification axes.} Each row is a way of joining a graph to a language model. \emph{Direction} says which component supplies knowledge to the other. \emph{Lifecycle stage} says where in the pipeline the exchange happens, since a model used to normalize synonyms during construction makes a different claim from one consulted at query time. \emph{Coupling} gives the depth level defined in Fig.~\ref{fig:coupling}. The last two columns are the practical payoff: what the family buys, and the characteristic way it fails. Reading down the failure column shows that the families fail differently rather than in degree, which is why pooling them under one label obscures more than it reveals.}
+\label{tab:taxonomy}
+\footnotesize
+\begin{tabularx}{\textwidth}{@{}L{3.2cm} L{2.2cm} L{2.6cm} L{1.2cm} Y Y@{}}
+\toprule
+\textbf{Family} & \textbf{Direction} & \textbf{Lifecycle stage} & \textbf{Coupling} & \textbf{Primary benefit} & \textbf{Principal failure} \\
+\midrule
+Triple/path prompting & KG$\rightarrow$LLM & Retrieval/generation & C1 & Explicit, inspectable evidence & Context noise; qualifier loss \\
+Natural-language graph query & Bidirectional & Query/retrieval & C1--C2 & Accessible structured search & Invalid or semantically wrong queries \\
+Community GraphRAG & KG$\rightarrow$LLM & Index/retrieval & C1--C2 & Broader multi-hop context & Hub bias; lossy summaries \\
+Graph encoder or adapter & KG$\rightarrow$LLM & Representation/inference & C3 & Compact structural signal & Weak attribution; update coupling \\
+KG-derived instruction tuning & KG$\rightarrow$LLM & Training & C4 & Internalized domain behavior & Staleness; source opacity \\
+Graph-constrained decoding & KG$\rightarrow$LLM & Generation/verification & C5 & Schema or relation validity & Incomplete graph suppresses valid novelty \\
+LLM extraction and normalization & LLM$\rightarrow$KG & Construction & C1--C4 & Scale and schema mapping & Hallucinated or duplicated assertions \\
+LLM graph completion & LLM$\rightarrow$KG & Curation/update & C1--C4 & Candidate hypothesis generation & Plausibility mistaken for evidence \\
+Iterative graph agent & Bidirectional & Query/reasoning & C2--C5 & Adaptive multi-step search & Tool errors and trajectory instability \\
+Self-updating graph system & Bidirectional & Monitoring/update & C5 & Continuous learning & Circular self-validation and poisoning \\
+\bottomrule
+\end{tabularx}
+\end{table*}

@@ -1,0 +1,17 @@
+\section{Future Directions}
+
+The next stage is not a larger graph beside a larger model. It is establishing when the graph is necessary, whether the whole system is safe, and how its behavior stays controlled while the knowledge underneath it changes. Six priorities follow from the evidence reviewed here, and they are ordered by how soon they are achievable rather than by importance.
+
+\emph{Matched comparisons.} Hold the model, context budget, source snapshot, and evaluation set constant, then compare closed-book generation, long-context input, text retrieval, symbolic query, graph retrieval, and graph-plus-text hybrids. Shuffle graph topology while keeping node text to separate structure from added content. The output worth having is not another win column but a decision rule that predicts which query types benefit from a graph, because that is what a practitioner needs and nobody currently has.
+
+\emph{Temporal and multisite validation.} Freeze all evidence at the prediction time and test on later patients, later literature, and a second institution. This is the cheapest high-value experiment in the field and it is rarely run, which is why the temporal degradation reported by ChronoMedKG~\cite{ahmed2026chronomedkg} came as a surprise rather than a confirmation.
+
+\emph{Claim-level evidence evaluation.} Annotate whether each generated claim is supported, contradicted, outdated, or simply absent from what was retrieved, and whether the cited source is the original. VERICITE showed how far current systems are from this~\cite{ma2026vericite}, and until it is routine, citation display will keep passing for grounding.
+
+\emph{Update metrics for graph-maintaining agents.} Agents that write to the graph are evaluated on question-answering accuracy, which measures the wrong thing entirely. What is needed is candidate-edge precision by relation type, conflict-resolution accuracy when sources disagree, time from published correction to graph correction, the propagation radius of a bad edge, and demonstrated rollback. None of these appears in the current literature.
+
+\emph{Security benchmarks for biomedical graph retrieval.} The poisoning results~\cite{yang2024poisoning,alber2025poisoning,zou2025poisonedrag} establish the threat and stop there. The field needs healthcare-specific attack suites covering malicious papers, false triples, synonym attacks, indirect prompt injection, and cross-patient leakage, reporting residual risk after defense rather than accuracy under attack.
+
+\emph{Agents on the graphs that can support them.} The literature-scale and multi-omics graphs carry resolvable provenance and temporal metadata, and no agentic system uses them. An agent over a scholarly-evidence graph could trace a claim from guideline to trial to patent, which is a workflow no current system performs and which needs no capability that does not already exist.
+
+Beyond these, the field would benefit more from shared evidence infrastructure than from another leaderboard: a versioned record linking each system to its model, graph, snapshots, comparator, metrics, failure modes, and released artifacts, with benchmark cases that carry conflicting evidence, time stamps, and security perturbations. That would replace the question of whether a graph improved a model on a benchmark with the more useful one: for which users, tasks, and evidence conditions does a given configuration pay for itself, and what keeps it paying.

@@ -1,0 +1,25 @@
+\subsection{Relationship to prior surveys}
+\label{sec:priorsurveys}
+
+Existing surveys establish the field and leave an engineering-evidence gap. Table~\ref{tab:priorsurveys} compares the closest works and states what this survey adds.
+
+\begin{table*}[!t]
+\centering
+\caption{\textbf{How this survey differs from the closest existing syntheses.} Prior reviews establish the field and organize it mainly by the direction knowledge flows, that is, whether the graph improves the model or the model improves the graph. That distinction is real but coarse: it groups a system that pastes triples into a prompt with one that trains a graph-aware encoder, verifies claims, and versions its evidence. The rightmost column states what remains once directionality is accounted for, which is the engineering material this survey supplies.}
+\label{tab:priorsurveys}
+\footnotesize
+\begin{tabularx}{\textwidth}{@{}L{3.0cm} L{3.6cm} Y Y@{}}
+\toprule
+\textbf{Synthesis} & \textbf{Principal scope} & \textbf{What it establishes} & \textbf{Remaining gap addressed here} \\
+\midrule
+Xu et al., KDD 2025~\cite{xu2025biomedklm} & Biomedical LLM--KG unification & Construction, KG-guided enhancement, applications & Lifecycle failure propagation, evaluation layers, maturity, governance \\
+Murali et al., IEEE JBHI 2026~\cite{murali2026integrating} & Medical KG--LLM integration & KG-enhanced, LLM-augmented, synergistic categories & Coupling depth, conditional benefit, validity threats, deployment controls \\
+Liu et al., JAMIA 2025~\cite{liu2025biomedrag} & Biomedical RAG review and meta-analysis & Evidence on retrieval augmentation and clinical development & Graph-specific retrieval, construction, representation, constraints, updates \\
+He et al., 2025~\cite{he2025biomedrag} & Biomedical RAG pipeline & Retrieval, reranking, generation, datasets, applications & KG lifecycle and graph-specific failure modes beyond RAG \\
+Lu et al., 2025~\cite{lu2025biomedkg} & Biomedical KG landscape & Domains, tasks, resources, applications & Functional coupling to generative models and comparative controls \\
+GraphRAG survey, 2025~\cite{graphrag2025survey} & General graph RAG & Broad technical taxonomy across domains & Biomedical semantics, evidence, clinical risk, translational maturity \\
+\bottomrule
+\end{tabularx}
+\end{table*}
+
+Three choices set this synthesis apart. First, directionality is kept but crossed with lifecycle and coupling depth. Two systems can both be ``KG-enhanced LLMs'' while one merely pastes triples into a prompt and the other trains a graph-aware representation, runs iterative queries, verifies claims, and logs evidence versions. Grouping them without more resolution hides their engineering differences. Second, evaluation is decomposed so that improvement or failure can be located. Third, evidence maturity and governance are treated as technical properties. Version locking, provenance capture, rollback, access control, and workflow monitoring are not afterthoughts bolted on for ethics review; they decide whether results can be reproduced and whether a deployed system can be controlled.

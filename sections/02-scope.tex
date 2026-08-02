@@ -1,0 +1,30 @@
+\section{Review Scope and Method}
+
+\subsection{Review type and objectives}
+
+This is a critical engineering survey, not a statistical meta-analysis. The literature mixes question answering, diagnosis, code prediction, link prediction, information extraction, drug repurposing, workflow support, and graph curation. Outcomes reported as exact match, F1, area under the curve, recall, clinician preference, or case-study plausibility are not commensurable, and pooling them would produce a precise-looking but invalid effect estimate. The goal instead is to identify architectures, fix comparable engineering dimensions, weigh the strength of claimed benefits, and expose missing validation.
+
+Foundational knowledge-graph and ontology work appears as background. The method synthesis concentrates on the period since instruction-tuned generative models became widely available, because that is when the coupling patterns discussed here took their current form.
+
+\subsection{Operational definitions}
+
+The inclusion boundary is as follows. A \emph{knowledge graph} is an identifiable, explicit graph of entities and relations, normally with types, a schema or ontology, or graph-database semantics; a similarity network or a transient chain-of-thought diagram does not automatically qualify. An \emph{LLM} is a pretrained generative or tool-using language or foundation model; encoder-only biomedical models appear only as direct technical precursors. A study must implement or evaluate a \emph{functional interaction} between the graph and the language model, so mentioning both in the motivation is not enough. We distinguish curated biomedical KGs, literature-derived assertion graphs, ontology and terminology resources, EHR-derived patient graphs, and transient task-specific graphs, because their provenance, privacy, and validation requirements differ. We also separate scientific discovery, information access, clinical research operations, clinician-facing support, and patient-facing communication, because success in one stratum is not evidence of readiness in another.
+
+\subsection{How systems were selected}
+
+This survey is built around representative systems rather than exhaustive coverage. The aim is that an engineer designing a graph-grounded clinical system can read it, find the two or three papers closest to their situation, and understand what those papers did, what they proved, and what they left open. Exhaustive enumeration works against that goal, because a list of ninety systems with one sentence each conveys less than a dozen analyzed properly.
+
+A system earned a place when it did at least one of the following: introduced a coupling mechanism that others have since built on; exposed a failure mode that changes how the class of systems should be evaluated; established a resource or benchmark that later work depends on; or carried its evaluation past offline benchmarking into clinician-facing or prospective use. Where several papers make the same architectural move, we discuss the clearest instance and treat the rest as variants. Papers were left out when the ``graph'' was a document similarity network with no typed semantics, when the model was neither generative nor tool-using, when the biomedical setting was incidental, or when the graph-model interaction was described but not implemented.
+
+Peer-reviewed work carries the argument. Preprints appear where they introduce a resource or a result that changes what the field currently believes, and they are labeled as preprints at the point of use so that a reader can weigh them accordingly.
+
+\subsection{What this survey does not cover}
+
+Three boundaries are worth stating. We do not attempt a quantitative meta-analysis, because the outcomes are not commensurable and pooling them would produce a precise-looking number with no defensible interpretation. We do not rank systems by headline score, because the comparisons behind those scores are usually confounded by corpus, generator, and context budget. And we treat vendor-specific model performance as tied to a particular model version rather than as a durable property of the architecture, since a hosted endpoint can change without notice.
+
+\subsection{Evidence extraction and appraisal}
+
+For each representative system the synthesis records the KG name and version, graph source and provenance, schema, temporal properties, model and version, coupling mechanism, graph-query and retrieval stages, task and intended user, dataset and split, comparator, outcome, ablation, evidence status, code and data availability, and any operational or clinical validation. Appraisal is a profile, not a single quality score. A study can have a rigorous retrieval evaluation and weak clinical generalizability, or strong predictive discrimination and poor leakage control.
+
+Four validity threats get special attention. \emph{Graph-to-label leakage} occurs when labels, answers, or answer-derived paths sit in the inference graph. \emph{Temporal leakage} occurs when a future graph snapshot answers a historical question. \emph{Model contamination} occurs when a benchmark or its solutions may have appeared in pretraining. \emph{Evaluator circularity} occurs when an LLM judges the outputs of a related LLM without independent validation. These threats matter more than minor prompt differences and should be documented.
+

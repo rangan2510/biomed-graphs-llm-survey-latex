@@ -1,0 +1,139 @@
+\section{Layered Evaluation and Comparative Evidence}
+\label{sec:evaluation}
+
+KG--LLM systems should be evaluated as pipelines with observable intermediate states. Let $G$ denote a versioned graph, $R(q,G)$ the retrieved subgraph or evidence set for query $q$, and $y = M(q,R)$ the generated output. Final-answer quality alone cannot say whether an error came from the graph, normalization, retrieval, reasoning, or generation, and a high-quality graph does not guarantee that the LLM uses it. We propose seven evaluation layers, summarized in Table~\ref{tab:layers}.
+
+\begin{table*}[!t]
+\centering
+\caption{\textbf{Seven layers at which a graph-grounded system should be measured, and why one number is not enough.} A single accuracy figure cannot say where a system succeeded or failed, because the pipeline has many places to go wrong and slack at one stage can mask a deficit at another. A correct answer may come from the model's parametric memory while the retriever returned nothing useful; a perfect graph earns nothing if the model ignores what it is given. Layers L1 through L7 run in pipeline order, from the graph itself through concept linking, retrieval, evidence use, generation, operational cost, and finally whether the output helps a human do the work. The first five belong in any system paper. L6 and L7 become obligatory once the claim moves from algorithmic performance to practical utility, because latency, cost, and misplaced reliance are the properties that decide whether a system survives contact with a workflow.}
+\label{tab:layers}
+\footnotesize
+\begin{tabularx}{\textwidth}{@{}L{2.4cm} L{3.4cm} Y@{}}
+\toprule
+\textbf{Layer} & \textbf{Core question} & \textbf{Recommended measures} \\
+\midrule
+L1 Graph and schema & Is the knowledge correct, coherent, current, fit for purpose? & Entity/relation precision and recall by type; ontology conformance; duplicate and contradiction rates; provenance coverage; temporal freshness; task-specific coverage \\
+L2 Normalization and query formation & Right concepts and an executable query? & Entity-linking accuracy; top-$k$ concept recall; ambiguity rate; SPARQL/Cypher exact and execution accuracy; relation-direction accuracy; invalid-query and timeout rates \\
+L3 Retrieval & Sufficient, relevant, economical evidence? & Evidence recall@$k$, precision@$k$, MRR/nDCG; answer-bearing path recall; path validity; subgraph compactness; source diversity; latency \\
+L4 Reasoning and evidence use & Did the model use the graph correctly? & Multi-hop/path validity; supported intermediate-claim rate; relation-direction errors; contradiction handling; counterfactual consistency; distractor resistance; sensitivity to removing decisive edges \\
+L5 Generation and attribution & Correct, complete, calibrated, supported? & Task accuracy/F1; claim-level support and contradiction rates; citation precision/recall; completeness; harmful-error severity; Brier/ECE; abstention and risk--coverage \\
+L6 System and operations & Worth the cost and stable under updates? & P50/P95 latency; throughput; token and retrieval volume; cost/query; memory and energy; timeout/failure rate; build/update time; sensitivity to model or graph change \\
+L7 Human and clinical utility & Does it improve the work without unacceptable harm? & Task completion, time, decision change, appropriate reliance, override rate, cognitive load, subgroup effects, adverse-event severity, prospective outcomes \\
+\bottomrule
+\end{tabularx}
+\end{table*}
+
+The first five layers should appear even in an offline system paper. Layers 6 and 7 become mandatory as claims move from algorithmic performance to translational or clinical utility.
+
+\subsection{Graph and retrieval metrics must be task-conditioned}
+
+Graph accuracy should be broken out by node and edge type, source, extraction method, and evidence grade. A micro-average hides the cases that matter. Frequent, easy relations dominate the number while performance on rare but safety-critical edges, contraindications above all, stays invisible. A useful audit samples from each stratum and asks domain experts to judge the assertion, its direction, its context, its temporality, and its provenance.
+
+Completeness is better framed as task-specific coverage than as some unknowable global quantity. Ask what fraction of evaluation cases have their decisive diagnosis in the top 50 retrieved candidates. Ask what fraction of gold evidence statements the graph schema can even express. Both are answerable; ``is the graph complete'' is not.
+
+Retrieval evaluation needs sufficiency and parsimony together. Recall at $k$ says whether the gold evidence was retrieved; precision at $k$ says how much of what came back was relevant. For a graph the evidence unit has to be declared first, since an edge, a path, a neighborhood, a community summary, and a source passage are not comparable. Compactness matters too, reported as relevant edges over total retrieved edges alongside the token count. A graph retriever can post high node recall by returning a neighborhood so large the model drowns in it. The BioRAG ablation found no universal winner among retrieval strategies, only trades between faithfulness, context recall, and context precision~\cite{bhojani2026biorag}.
+
+For systems that generate SPARQL or Cypher, string match is the wrong measure, because two syntactically different queries can mean the same thing. Report parsing success, execution success, denotation accuracy, and unsafe-query rate instead. Then adjudicate a sample of traces by hand anyway, since a query can execute cleanly and still ask the wrong question.
+
+\subsection{Reasoning faithfulness is distinct from path plausibility}
+
+A retrieved path is not automatically an explanation. Four concepts should stay separate. \emph{Attribution correctness}: the cited edge, path, or document supports the claim. \emph{Retrieval faithfulness}: the system reports what was retrieved and does not invent graph content. \emph{Reasoning faithfulness}: the cited evidence actually influenced the answer rather than being attached afterward. \emph{Clinical validity}: the reasoning and conclusion suit the patient and decision context.
+
+Attribution can be measured directly. Break the response into atomic claims, then label each one as supported, contradicted, or not addressed by the evidence it cites. ALCE established citation recall and precision as separate dimensions~\cite{gao2023alce}. VERICITE showed why that separation matters here: across four models and 500 BioASQ questions, only 27 to 41\% of citation pairs were supported at sentence level, and supplying gold documents improved the answers without much improving the citations~\cite{ma2026vericite}. A visible identifier is not evidence that the sentence before it follows.
+
+Reasoning faithfulness cannot be measured by inspection. It needs interventions. Remove the decisive edge and see whether the answer changes. Replace it with a controlled counterfactual. Reverse a relation. Add plausible distractor paths. Or keep all the node text and shuffle the topology. That last one is the most diagnostic single test available: if performance survives having the graph structure destroyed, the benefit was coming from the added text, not the relations. If the answer instead follows a false counterfactual edge, the system is graph-sensitive but not robust. Either result tells you more than a fluent chain of thought.
+
+Automated evaluators such as RAGAS and ARES give scalable estimates of context relevance, answer relevance, and faithfulness~\cite{es2024ragas,saadfalcon2024ares}. They are measurement instruments, not ground truth. A study using one should report its model and version, the prompt, the threshold, the calibration sample, and its agreement with clinician labels. No safety-critical conclusion should rest on a model judging another model.
+
+\subsection{Matched baselines: isolating the value of graph structure}
+
+Many published comparisons change several factors at once, giving the graph arm a larger corpus, more context, a stronger generator, or more inference calls than the baseline. Such experiments assess whole products and cannot attribute the gain to the graph. Table~\ref{tab:attribution} sets out the arms and ablations that can, and the constraint that makes them work is holding everything else fixed: the same question set, knowledge cutoff, corpus snapshot, generator, prompt budget, and where feasible the same token and latency budget.
+
+\begin{table*}[!t]
+\centering
+\caption{\textbf{The comparison arms and ablations needed to show that the graph, and not something else, produced the improvement.} Published comparisons often change several things at once, giving the graph arm a larger corpus, a longer context, or a stronger generator than the baseline, which measures a whole product rather than the graph's contribution. The upper block is a ladder of comparators, each answering one question: the closed-book arm sets the floor the graph must beat, the text-retrieval arms test whether ordinary passage search would have sufficed, and the oracle arm separates a retrieval failure from a generation failure. The lower block removes or corrupts one component at a time. The topology-shuffle ablation is the most diagnostic single test in the table, because a system whose performance survives having its graph structure destroyed was benefiting from the added text, not the relations. Every arm must run against the same question set, snapshot, generator, and context budget, or the comparison reintroduces the confound it was meant to remove.}
+\label{tab:attribution}
+\footnotesize
+\begin{tabularx}{\textwidth}{@{}L{4.2cm} Y Y@{}}
+\toprule
+\textbf{Arm or intervention} & \textbf{Question it answers} & \textbf{Interpretation} \\
+\midrule
+\multicolumn{3}{@{}l}{\textit{Comparator ladder}} \\
+Closed-book model & How much comes from parametric knowledge? & Sets the floor the graph must beat \\
+Long-context input & Is retrieval needed at all at this corpus size? & If not, retrieval is added complexity \\
+BM25 text retrieval & Does lexical matching suffice? & Cheapest baseline that often suffices \\
+Dense or hybrid text retrieval & Does semantic passage retrieval suffice? & The comparator most papers omit \\
+Symbolic graph query & Does the model add anything beyond execution? & Isolates the model's contribution \\
+Graph embedding or GNN & Does language reasoning beat graph-native prediction? & Relevant for link-prediction framings \\
+Graph retrieval & Does topology improve selection or reasoning? & The claim under test \\
+Graph plus text & Is topology complementary to passages? & Usually the strongest configuration \\
+Oracle evidence & What is the ceiling if retrieval succeeds? & Separates retrieval from generation failure \\
+\midrule
+\multicolumn{3}{@{}l}{\textit{Ablations}} \\
+Remove graph context & Total value of graph conditioning & No change means the graph was unused or redundant \\
+Shuffle topology, keep node text & Value of structure beyond added text & Persistence undermines structural claims \\
+Random or degree-matched subgraph & Benefit beyond size and hub priors & Detects gains from generic high-degree concepts \\
+Strip provenance, confidence, time & Whether metadata is actually used & Often reveals it is not \\
+Vary hops and subgraph size & Coverage against dilution & Locates the model-specific optimum \\
+Old versus new snapshot & Value and risk of updating & Measures freshness gain and regression \\
+Oracle versus real entity linking & Contribution of normalization error & Bounds reasoning independent of linking \\
+Disable verifier or arbiter & Contribution of each control & Shows whether safety precedes or follows generation \\
+Drop one source database & Source dependence and redundancy & Exposes hidden reliance on a single source \\
+\bottomrule
+\end{tabularx}
+\end{table*}
+
+The primary graph-effect estimate should be a paired difference with uncertainty, $\Delta_G = S(\text{graph retrieval}) - S(\text{matched text retrieval})$, for a predeclared metric $S$. Secondary estimates should normalize by token count, latency, and cost. For open-ended answers, blinded adjudication should compare paired outputs and classify what actually improved: a newly retrieved fact, a better multi-hop connection, improved provenance, or simply more context.
+
+Stress testing belongs alongside the ablations. Useful perturbations include missing decisive edges, poisoned or incorrect edges, retracted evidence, outdated guidelines, contradictory studies, ambiguous acronyms, rare synonyms, unseen relations, and prompt injection inside retrieved text. For patient graphs, add incomplete histories, reordered events, copied-forward notes, and cross-institution terminology drift. Report both average degradation and the worst clinically significant failure, because a system can degrade gracefully on average while failing catastrophically on a narrow class of input.
+
+\subsection{When does graph grounding help, and when does it hurt?}
+
+The literature does not support a universal claim that KGs improve LLMs. It supports a conditional one: graphs help when they add nonredundant, sufficiently covered, query-relevant structure that the model can consume within its context and reasoning limits. Table~\ref{tab:whenhelps} summarizes the emerging pattern.
+
+\begin{table*}[!t]
+\centering
+\caption{\textbf{When adding a knowledge graph helps, when it does not, and what the published evidence shows in each case.} This is the survey's central empirical claim assembled in one place. The pattern is conditional rather than uniform. Graphs pay off when they hold knowledge the model lacks, when entity linking succeeds, and when the retrieved subgraph is small enough to use, which is why the rows reporting gains involve patient-context structure, typed path reranking, or facts genuinely novel to the model. The lower rows are the counterexamples that a survey should not omit: retrieval producing one- to two-point inconsistent gains, deeper retrieval lowering citation faithfulness, the same graph snippet helping one model and confusing another, and filtering a graph down improving results. Read together they argue for treating graph use as a decision to be made per query rather than a fixed architectural commitment.}
+\label{tab:whenhelps}
+\footnotesize
+\begin{tabularx}{\textwidth}{@{}L{4.2cm} Y Y@{}}
+\toprule
+\textbf{Condition} & \textbf{Evidence} & \textbf{Interpretation} \\
+\midrule
+Patient context needs structured neighborhood retrieval & KARE reports sizable gains for mortality and readmission on MIMIC-III/IV~\cite{jiang2025kare} & Community structure collects dispersed context; retrospective accuracy is not clinical validation \\
+Diagnosis benefits from entity weighting and path reranking & medIKAL on a Chinese EMR dataset~\cite{jia2025medikal} & Helps when linking and candidate coverage are adequate; dataset- and language-specific \\
+Query is incomplete, benefits from hypothesis-guided expansion & HyKGE on Chinese medical QA~\cite{jiang2025hykge} & Parametric knowledge can aid retrieval but can also bias it toward self-confirming paths \\
+Local documents must connect to authoritative sources & MedGraphRAG vs.\ no-retrieval, text-RAG, GraphRAG~\cite{wu2025medgraphrag} & Graph organization aids source-linked retrieval; sources still need claim-level entailment \\
+Decisive knowledge is outside model training & Little MedQA gain from PrimeKG, near-full recovery on counterfactual/novel facts~\cite{mandarapu2026controlled} & Marginal value depends on knowledge novelty; public facts may be redundant for strong models \\
+Ontology retrieval has high candidate coverage & Ontology retrieval beats open generation when the true disease is in the candidate set~\cite{elmofty2026ontology} & Coverage is a gating variable; low coverage should not force a graph-bounded answer \\
+Retrieval adds mostly redundant or noisy context & Small, inconsistent 1--2 point gains; distractors can hurt~\cite{nourbakhsh2026retrieval} & Retrieval success and evidence use are separate bottlenecks \\
+More evidence dilutes attribution & Citation support falls as depth rises~\cite{ma2026vericite} & Tune depth against both coverage and support precision \\
+Short snippets interact with architecture & Snippets help some LLMs, hurt others~\cite{liu2026mhgraphbench} & Serialization and interface compliance are part of the treatment \\
+Evidence is heterogeneous and incomplete & CrossDDI: PubMed covered only 40.5\% of positives~\cite{wang2026crossddi} & Deterministic arbitration aids traceability but cannot recover absent facts \\
+Scientific sources conflict & BioConflict: strong detection, brittle synthesis~\cite{kirubakaran2026bioconflict} & Flattening conflicting edges can be worse than preserving disagreement \\
+Graph has many irrelevant relations & Metapath filtering improved repurposing link prediction~\cite{ratajczak2022metapath} & More graph is not more signal; task-conditioned filtering can help \\
+\bottomrule
+\end{tabularx}
+\end{table*}
+
+These findings motivate an adaptive grounding policy rather than unconditional GraphRAG. Before retrieval, the system should estimate entity-linking confidence, graph coverage, knowledge freshness, and whether a deterministic lookup would answer the query. After retrieval, it should estimate evidence sufficiency and contradiction. A low-coverage or conflicting-evidence case should trigger broader text search, a different graph, clarification, or abstention, not simply more graph hops. The objective is not maximum graph use but minimum expected risk under a fixed evidence and compute budget.
+
+\subsection{Stratified evaluation and subgroup validity}
+
+A single aggregate score hides several distinct mechanisms by which a KG--LLM pipeline can fail unevenly across populations. The source literature overrepresents some populations and diseases, so graph coverage is not uniform. Terminologies can encode outdated or overly broad categories. Entity linking often performs worse on local, multilingual, or community-specific language. Sparse coverage produces systematic retrieval failure for rare conditions rather than random error. Each of these is a measurable pipeline property, not a downstream social consideration, and each maps onto a layer in Table~\ref{tab:layers}.
+
+Evaluation should therefore stratify the whole pipeline, reporting concept-mapping coverage, retrieval recall, abstention, calibration, error severity, and task outcome across clinically and socially relevant groups, sites, languages, and data-quality strata. Small-group estimates need confidence intervals, and intersectional strata need explicit sample-size reporting rather than silent aggregation. When a demographic attribute is used for clinically justified effect modification, the relation and its supporting evidence should be stated, and a system should not infer biological meaning from a social category by default. The prospective trial-matching study reported subgroup performance alongside a pre-specified alert threshold~\cite{loaizabonilla2026trialmatch}, which is the reporting standard other work should meet; equal aggregate accuracy across groups still does not establish equal benefit when access, referral, or resource availability differ.
+
+\subsection{Reporting negative and null results}
+
+Null graph gains are informative when the comparison is matched. Authors should report per-dataset and per-question-type effects rather than only an aggregate mean, because coverage regimes can cancel out. They should disclose the fraction of cases in which no query entity was linked, no candidate answer was reachable, the decisive evidence was retrieved, retrieved evidence contradicted the final answer, and retrieval flipped a correct closed-book answer to an incorrect one. That last quantity, the harmful answer revision rate, matters most for strong LLMs. Suggested primary reporting includes paired absolute and relative differences with 95\% confidence intervals; per-case transition counts (wrong-to-right, right-to-wrong, unchanged); effect stratification by coverage, novelty, hop length, specialty, and model size; retrieval-conditioned accuracy when gold evidence is and is not retrieved; supported-claim and contradiction rates; latency, tokens, and cost per corrected answer; and severity-weighted clinical error counts. McNemar's test or paired bootstrap intervals suit paired discrete outcomes, while stratified bootstrap or hierarchical models suit clustered questions, and multiple comparisons need a declared primary contrast with correction. Mean scores should come with seeds or repeated API runs, because stochastic decoding and changing hosted models can reorder ranks.
+
+\subsection{Reproducibility and auditability}
+
+A KG--LLM paper is reproducible only when another group can reconstruct the knowledge boundary and the retrieval behavior, not just rerun a prompt against a similarly named model. That takes more than releasing code. It takes the graph snapshot or a deterministic recipe for rebuilding it, the retrieval configuration down to index version and depth, the exact model revision with its access date, and the retrieved identifiers for every test instance. A full artifact checklist, and a per-instance record format, are given in the supplementary material~\cite{supplementary}.
+
+Reproducibility is better reported as a profile than as a yes or no. A paper that describes its architecture but ships nothing is not in the same position as one that ships code but omits the graph snapshot, and neither is in the same position as one whose main estimates an independent group has reproduced. The most demanding level, and the one that matters for clinical claims, is reproduction on a later time window, a different institution, or a newer snapshot, because that is the only version of the test that survives contact with a changing world. Most current work sits at the lower end: code or prompts are available, the snapshot and traces usually are not. Proprietary APIs do not rule out useful reproducibility, but they do require dated identifiers, preserved raw outputs, repeated runs, and a plan for what happens when the endpoint retires.
+
+Evidence tables should keep reproducibility, peer-review status, and clinical maturity in separate columns, because they measure different things. A reproducible offline benchmark is not clinically mature, and a promising clinician study is often not computationally reproducible.
+
+The evidence should not be pooled into a single ``KG--LLM accuracy'' number. Tasks, graphs, model generations, baselines, and metrics are too heterogeneous, and many comparisons are confounded. Quantitative synthesis fits only repeated task--dataset--metric combinations with matched interventions; otherwise a structured evidence profile is the honest choice, recording effect direction and uncertainty, baseline strength, coverage, leakage risk, peer-review status, reproducibility, and maturity. The defensible conclusion from the recent literature is bounded. Biomedical graphs can improve retrieval, reasoning, verification, and updating, especially for knowledge the model does not already hold. They do not eliminate hallucination, ensure faithful explanations, or confer clinical validity. Their benefit depends on coverage and quality, the retrieval and serialization interface, the model's ability to use what it is given, and evaluation against a matched alternative.

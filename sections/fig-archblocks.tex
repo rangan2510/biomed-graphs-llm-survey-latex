@@ -1,0 +1,72 @@
+% Minimal block diagrams of four representative system architectures.
+\begin{figure*}[!t]
+\centering
+\resizebox{\textwidth}{!}{%
+\begin{tikzpicture}[
+  font=\small,
+  b/.style={draw=black!60, rounded corners=2pt, fill=blue!6, text width=20mm,
+            align=center, minimum height=8mm, inner sep=2pt},
+  kgb/.style={b, fill=teal!10, draw=teal!55!black},
+  mb/.style={b, fill=purple!8, draw=purple!55!black},
+  gb/.style={b, fill=orange!12, draw=orange!70!black},
+  a/.style={-{Stealth[length=2.4mm,width=1.9mm]}, line width=0.85pt, draw=black!65,
+            rounded corners=3pt},
+  lp/.style={-{Stealth[length=2.4mm,width=1.9mm]}, line width=0.85pt, draw=black!45,
+             rounded corners=3pt, dashed},
+  ttl/.style={font=\small\bfseries, anchor=west},
+  sub/.style={font=\scriptsize\itshape, text=black!55, anchor=west},
+  sep/.style={draw=black!15, line width=0.6pt}
+]
+
+% ---------------- (a) prune-then-prompt
+\node[ttl] at (-0.9,1.8)  {(a) Prune, then prompt};
+\node[sub] at (-0.9,1.35) {KG-RAG over SPOKE};
+\node[kgb] (a1) at (0,0)    {Typed graph};
+\node[b]   (a2) at (2.6,0)  {Prompt-aware pruning};
+\node[mb]  (a3) at (5.2,0)  {Model};
+\draw[a] (a1) -- (a2);
+\draw[a] (a2) -- (a3) node[font=\scriptsize, text=black!55, midway, above=1pt]{small subgraph};
+
+% ---------------- (b) rank paths
+\node[ttl] at (8.3,1.8)  {(b) Rank candidate paths};
+\node[sub] at (8.3,1.35) {DR.KNOWS, medIKAL};
+\node[b]   (b1) at (9.2,0)   {Patient text};
+\node[kgb] (b2) at (11.8,0)  {Link, expand one hop};
+\node[b]   (b3) at (14.4,0)  {Rank paths};
+\node[mb]  (b4) at (17.0,0)  {Model};
+\draw[a] (b1) -- (b2);
+\draw[a] (b2) -- (b3);
+\draw[a] (b3) -- (b4);
+\draw[lp] (b3.south) -- ++(0,-0.8) -| (b2.south)
+  node[font=\scriptsize, text=black!50, pos=0.5, below]{iterate};
+
+\draw[sep] (-1.2,-1.9) -- (18.2,-1.9);
+
+% ---------------- (c) verify before answering
+\node[ttl] at (-0.9,-2.5)  {(c) Verify before answering};
+\node[sub] at (-0.9,-2.95) {KGARevion, CrossDDI};
+\node[mb]  (c1) at (0,-4.3)   {Model proposes triples};
+\node[kgb] (c2) at (2.6,-4.3) {Graph checks each};
+\node[gb]  (c3) at (5.2,-4.3) {Keep only supported};
+\node[mb]  (c4) at (7.8,-4.3) {Answer};
+\draw[a] (c1) -- (c2);
+\draw[a] (c2) -- (c3);
+\draw[a] (c3) -- (c4);
+
+% ---------------- (d) agent that maintains the graph
+\node[ttl] at (10.4,-2.5)  {(d) Agent maintains the graph};
+\node[sub] at (10.4,-2.95) {AMG-RAG, MedKGent};
+\node[b]   (d1) at (11.3,-4.3) {New literature};
+\node[mb]  (d2) at (13.9,-4.3) {Extraction agent};
+\node[gb]  (d3) at (16.5,-4.3) {Quarantine, review};
+\node[kgb] (d4) at (13.9,-6.2) {Versioned graph};
+\draw[a] (d1) -- (d2);
+\draw[a] (d2) -- (d3);
+\draw[a] (d3.south) -- ++(0,-0.95) -| (d4.east);
+\draw[lp] (d4.west) -- ++(-1.7,0) |- (d2.south)
+  node[font=\scriptsize, text=black!50, pos=0.62, left]{context};
+\end{tikzpicture}%
+}
+\caption{\textbf{Four recurring architectures, reduced to their essential blocks.} Colour marks the role each component plays: teal for the graph, purple for the language model, orange for a control that can reject something. (a) The graph is pruned before it reaches the prompt, so the model sees a small subgraph rather than a neighbourhood; the work is in the pruning, not the model. (b) Patient text is linked to concepts, the graph is expanded a hop at a time, and candidate paths are ranked before any generation happens, with the dashed arrow marking the iteration that makes seed-concept errors so costly. (c) The order is inverted: the model proposes candidate triples and the graph acts as a filter, so the model contributes recall and the graph retains authority. Its ceiling is graph completeness, since a true but absent claim is rejected. (d) The agent's job is the graph itself, and the orange block is what separates this from an uncontrolled loop, since an extracted claim must survive review before it becomes retrievable evidence.}
+\label{fig:archblocks}
+\end{figure*}

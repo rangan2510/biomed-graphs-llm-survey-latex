@@ -1,0 +1,114 @@
+\section{Foundations}
+
+\subsection{Biomedical knowledge graphs as evidence-bearing infrastructure}
+
+A KG can be written as a set of triples $(h, r, t)$, where a head entity $h$ and a tail entity $t$ are joined by a relation $r$. Biomedical graphs usually need more than this bare form. An assertion may require qualifiers such as population, dose, tissue, experimental condition, publication, confidence, valid time, transaction time, or negation. An edge such as \emph{drug treats disease} means something different if it denotes an approved indication, a trial hypothesis, an observational association, a computational prediction, or a statement pulled from a retracted article. Reification, named graphs, hyperedges, statement identifiers, or property graphs can keep these distinctions. Flattening them into unqualified triples creates false equivalence.
+
+Schemas and ontologies constrain meaning. UMLS integrates many biomedical vocabularies~\cite{umls}; SNOMED CT supports clinical concepts and relations~\cite{snomedct}; RxNorm normalizes drugs~\cite{rxnorm}; LOINC identifies observations~\cite{loinc}; the Human Phenotype Ontology represents phenotypic abnormalities~\cite{hpo}; MONDO integrates disease concepts~\cite{mondo}; the Gene Ontology describes gene-product functions~\cite{geneontology}; and ChEBI represents chemical entities~\cite{chebi}. Their role is not only terminological. They fix entity granularity, allowed relations, subsumption, logical constraints, and interoperability, and they carry license and update obligations that flow downstream.
+
+Biomedical graphs differ along six dimensions, and each one changes what a system built on them can do. \emph{Construction}: expert curated, database integrated, literature extracted, EHR derived, or model generated. \emph{Semantics}: ontology-backed, schema-light, property graph, RDF, or a task-specific heterogeneous network. \emph{Evidence}: provenance at the source level, at the assertion level, as a confidence code, or not at all. \emph{Time}: a static release, periodic versions, valid-time aware, longitudinal, or continuously updated. \emph{Scope}: general, molecular, pharmacological, disease-specific, or patient-specific. \emph{Access}: open, registration controlled, institution restricted, or licensed.
+
+These are causal inputs to system behavior, not catalogue entries. A literature-extracted graph offers scale and inherits extraction error and publication bias. A curated graph offers stronger semantics and lags new evidence. An EHR graph carries local clinical context along with coding artifacts, missingness, local practice patterns, and protected information. Whatever the model retrieves, it is grounded only in what that graph happens to represent.
+
+\subsection{Large language models as probabilistic interfaces and controllers}
+
+LLMs generate tokens conditional on context. Instruction tuning, preference optimization, long-context mechanisms, retrieval augmentation, structured decoding, and tool use have turned them from text generators into general interfaces and workflow controllers. In biomedical systems they may perform concept normalization, query planning, evidence selection, synthesis, explanation, and conversational interaction. Domain adaptation can improve terminology and task behavior, but it does not establish access to current, sourceable evidence.
+
+Four kinds of knowledge coexist in such systems. \emph{Parametric knowledge} is encoded in weights and is hard to inspect or update selectively. \emph{Contextual knowledge} is the documents, triples, paths, or tables placed in the prompt. \emph{Tool-accessed knowledge} is returned by graph queries, search systems, calculators, or clinical services during execution. \emph{Committed knowledge} is what gets written into a graph, record, report, or decision-support workflow. Risk climbs as information moves from parametric or contextual use into committed knowledge. A hallucinated relation in an exploratory answer is a quality failure. The same relation written to a production KG and later retrieved as established evidence is a persistent systems hazard.
+
+\subsection{Why graph retrieval is not simply text retrieval}
+
+Conventional text RAG retrieves passages by lexical or embedding similarity. Graph retrieval instead exploits typed entities and relations, neighborhoods, paths, communities, schema constraints, or combinations of graph and text indexes. The unit of evidence may be a triple, an evidence-bearing edge, a path, a bounded subgraph, a community summary, or a graph-linked passage. This supports compositional questions and explicit relational constraints, but it adds failure points:
+\begin{multline}
+P(\text{correct answer}) \leq P(\text{correct linking}) \cdot P(\text{coverage}) \\
+{}\cdot P(\text{retrieval} \mid \text{linking}) \cdot P(\text{faithful use} \mid \text{evidence}).
+\end{multline}
+The expression is illustrative rather than an independence assumption. It shows why improving only the generator cannot overcome missing coverage, and why a high-quality graph cannot rescue poor entity linking or poor evidence use. Graph traversal can recover multi-hop relations a passage retriever misses, yet unconstrained expansion produces noisy neighborhoods and eats context. Shortest paths are not automatically the most evidentially relevant. Central nodes can dominate community methods. Textualizing triples can strip qualifiers, and graph embeddings can obscure provenance. The graph interface is therefore a first-class component to evaluate.
+
+\subsection{Grounding is not the same as verification}
+
+Four properties get run together under the word ``grounded,'' and separating them is what makes the evaluation framework of Section~\ref{sec:evaluation} possible. Conditioning an output on an external source is one thing. Linking a claim to a retrievable assertion is a second. Showing that the output actually follows from that assertion is a third. Showing that the information helps a user decide or verify is a fourth. A visible graph path delivers the second without implying the third or fourth, and a fluent rationale can be assembled after the answer was already chosen. Verification can be symbolic, retrieval-based, statistical, model-based, human, or some combination, and a biomedical system should say which property it verified and which it left alone.
+
+\subsection{The end-to-end lifecycle}
+
+The unit of analysis in this survey is the whole system in Fig.~\ref{fig:lifecycle}, not the model in the middle of it. Every transition can fail, and the failures travel. A construction error becomes a retrieval candidate. A query error selects the wrong subgraph. A rendering error erases the qualifier that mattered. Weak verification passes an unsupported claim. Unsafe feedback turns today's output error into tomorrow's ground truth. That is why a trustworthy design needs observability and version control along the whole chain, not just at the model.
+
+\begin{figure*}[!t]
+\centering
+\resizebox{\textwidth}{!}{%
+\begin{tikzpicture}[
+  font=\small,
+  band/.style={draw=none, fill=black!3, rounded corners=4pt},
+  blab/.style={font=\small\itshape, text=black!50, anchor=west},
+  box/.style={draw=black!60, rounded corners=3pt, fill=blue!6, text width=27mm,
+              align=center, minimum height=12mm, inner sep=3pt},
+  store/.style={box, fill=teal!10, draw=teal!55!black, line width=0.9pt},
+  gate/.style={box, fill=orange!12, draw=orange!70!black, line width=0.9pt},
+  human/.style={box, fill=purple!8, draw=purple!55!black},
+  f/.style={-{Stealth[length=2.8mm,width=2.2mm]}, line width=1pt, draw=black!65,
+            rounded corners=4pt},
+  wb/.style={-{Stealth[length=2.8mm,width=2.2mm]}, line width=1pt, dashed,
+             dash pattern=on 3.5pt off 2.5pt, draw=orange!80!black, rounded corners=4pt},
+  tag/.style={font=\scriptsize, text=black!55, inner sep=1.5pt},
+  wtag/.style={font=\scriptsize, text=orange!75!black, inner sep=1.5pt}
+]
+
+% ---------- bands
+\fill[band] (-2.0,-1.15) rectangle (16.9,1.9);
+\fill[band] (-2.0,-4.45) rectangle (16.9,-2.15);
+\fill[band] (-2.0,-7.75) rectangle (16.9,-5.45);
+\node[blab] at (-1.95,1.6)   {build time};
+\node[blab] at (-1.95,-2.45) {query time};
+\node[blab] at (-1.95,-5.75) {oversight};
+
+% ---------- build-time row
+\node[box]   (src) at (0,0)     {Sources: literature, databases, ontologies, EHRs};
+\node[box]   (con) at (3.8,0)   {Extraction and normalization};
+\node[store] (kg)  at (7.6,0)   {\textbf{Versioned graph}\\[1pt]{\scriptsize asserted edges only}};
+\node[box]   (idx) at (11.4,0)  {Indexes, embeddings, query services};
+\node[gate]  (qz)  at (15.2,0)  {Quarantine and independent review};
+
+% ---------- query-time row
+\node[box]  (req)  at (0,-3.3)     {Clinical or research question};
+\node[box]  (plan) at (3.8,-3.3)   {Entity linking and query planning};
+\node[box]  (ret)  at (7.6,-3.3)   {Retrieved triples, paths, subgraphs};
+\node[box]  (gen)  at (11.4,-3.3)  {Model reasoning and generation};
+\node[gate] (ver)  at (15.2,-3.3)  {Verification and abstention};
+
+% ---------- oversight row
+\node[box]   (mon) at (7.6,-6.6)  {Outcome and incident monitoring};
+\node[human] (hum) at (11.4,-6.6) {Clinician or downstream workflow};
+
+% ---------- build-time flow
+\draw[f] (src) -- (con);
+\draw[f] (con) -- (kg);
+\draw[f] (kg)  -- (idx);
+
+% ---------- indexes feed retrieval
+\draw[f] (idx.south) -- ++(0,-1.15) -| (ret.north)
+   node[tag, pos=0.30, above right]{evidence};
+
+% ---------- query-time flow
+\draw[f] (req)  -- (plan);
+\draw[f] (plan) -- (ret) node[tag, midway, above]{concepts};
+\draw[f] (ret)  -- (gen) node[tag, midway, above]{context};
+\draw[f] (gen)  -- (ver);
+
+% ---------- verification down into the workflow
+\draw[f] (ver.south) -- ++(0,-1.65) -| (hum.north);
+
+% ---------- workflow to monitoring, monitoring back to planning
+\draw[f] (hum) -- (mon);
+\draw[f] (mon.west) -- ++(-2.6,0) |- (plan.south)
+   node[tag, pos=0.42, below]{observed failures};
+
+% ---------- governed write-back
+\draw[wb] (gen.north) -- ++(0,1.25) -| (qz.north)
+   node[wtag, pos=0.20, above right]{candidate assertion};
+\draw[wb] (qz.south) -- ++(0,-0.8) -| (kg.south)
+   node[wtag, pos=0.62, below]{approved update, after review};
+\end{tikzpicture}%
+}
+\caption{\textbf{The path a graph-grounded answer travels, and the single point at which model output is allowed back into the graph.} The bands separate work done before any question is asked, work done per query, and the oversight that closes the loop. Solid arrows carry evidence forward. Sources become normalized edges, edges become a versioned graph, the graph is indexed, and retrieval hands a subgraph to the model. Two returns matter. Monitoring feeds observed failures back into linking and planning, which is how a system improves without its knowledge changing. The dashed orange path is the only route from model output to the graph, and it deliberately detours: a proposed assertion is quarantined, reviewed by something other than the model that produced it, and only then committed. Remove that detour and the model's own guess comes back later as apparently independent evidence, which is the circular self-validation failure of Section~\ref{sec:failure}. The graph is labelled ``asserted edges only'' to mark the boundary that keeps unreviewed candidates out of retrieval.}
+\label{fig:lifecycle}
+\end{figure*}

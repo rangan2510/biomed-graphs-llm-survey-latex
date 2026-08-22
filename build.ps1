@@ -1,11 +1,16 @@
 # build.ps1 -- compile main.pdf and supplementary.pdf, then clean up.
 #
 # Usage, from the repository root:
-#   .\build.ps1              compile both documents
+#   .\build.ps1              compile both documents (clean, no revision colour)
 #   .\build.ps1 -Main        compile only main.pdf
 #   .\build.ps1 -Supp        compile only supplementary.pdf
+#   .\build.ps1 -Marked      also write *-revised-marked.pdf with \rev{} in blue
 #   .\build.ps1 -Svg         also regenerate the editable SVG figures
 #   .\build.ps1 -KeepLogs    leave the .log files behind for debugging
+#
+# The clean and marked copies come from the same sources. \rev{} is a no-op
+# unless \REVMARKED is defined, which -Marked does on the command line, so the
+# two PDFs can never drift apart.
 #
 # Requires Docker Desktop running, with the texlive/texlive image available.
 # Nothing is installed on the host; TeX runs entirely inside the container.
@@ -14,6 +19,7 @@
 param(
     [switch]$Main,
     [switch]$Supp,
+    [switch]$Marked,
     [switch]$Svg,
     [switch]$KeepLogs
 )
@@ -40,32 +46,36 @@ function Test-Prerequisites {
     }
 }
 
-function Build-Document($name, $useBiber) {
-    Write-Host "Building $name.pdf..." -ForegroundColor Cyan
+function Build-Document($name, $useBiber, $jobname = $null, $marked = $false) {
+    if (-not $jobname) { $jobname = $name }
+    Write-Host "Building $jobname.pdf..." -ForegroundColor Cyan
+
+    # -Marked defines \REVMARKED before the document is read, which switches
+    # \rev{} from a no-op to blue text. Writing to a different -jobname keeps
+    # the clean and marked outputs side by side.
+    $input = if ($marked) { "'\def\REVMARKED{}\input{$name.tex}'" } else { "$name.tex" }
+    $tex   = "pdflatex -interaction=nonstopmode -jobname=$jobname $input"
 
     # pdflatex, then biber if the document has a bibliography, then two more
     # passes so that references, labels, and citations all settle.
     $steps = if ($useBiber) {
-        "pdflatex -interaction=nonstopmode $name.tex >/dev/null 2>&1; " +
-        "biber $name >/dev/null 2>&1; " +
-        "pdflatex -interaction=nonstopmode $name.tex >/dev/null 2>&1; " +
-        "pdflatex -interaction=nonstopmode $name.tex >/dev/null 2>&1"
+        "$tex >/dev/null 2>&1; biber $jobname >/dev/null 2>&1; " +
+        "$tex >/dev/null 2>&1; $tex >/dev/null 2>&1"
     } else {
-        "pdflatex -interaction=nonstopmode $name.tex >/dev/null 2>&1; " +
-        "pdflatex -interaction=nonstopmode $name.tex >/dev/null 2>&1"
+        "$tex >/dev/null 2>&1; $tex >/dev/null 2>&1"
     }
 
     Invoke-Tex $steps
 
-    $log = Join-Path $root "$name.log"
-    if (-not (Test-Path $log)) { throw "$name failed before producing a log. Check the .tex syntax." }
+    $log = Join-Path $root "$jobname.log"
+    if (-not (Test-Path $log)) { throw "$jobname failed before producing a log. Check the .tex syntax." }
 
     $logText = Get-Content $log -Raw
 
     # Hard errors first.
     $errors = Select-String -Path $log -Pattern '^!' | ForEach-Object { $_.Line }
     if ($errors) {
-        Write-Host "  ERRORS in $name.tex:" -ForegroundColor Red
+        Write-Host "  ERRORS in $jobname.tex:" -ForegroundColor Red
         $errors | Select-Object -Unique | ForEach-Object { Write-Host "    $_" -ForegroundColor Red }
     }
 
@@ -85,9 +95,9 @@ function Build-Document($name, $useBiber) {
         $pages = $Matches[1]
         $kb    = [math]::Round([int]$Matches[2] / 1024)
         $colour = if ($errors) { 'Yellow' } else { 'Green' }
-        Write-Host "  $name.pdf: $pages pages, $kb KB" -ForegroundColor $colour
+        Write-Host "  $jobname.pdf: $pages pages, $kb KB" -ForegroundColor $colour
     } else {
-        Write-Host "  $name.pdf was not produced." -ForegroundColor Red
+        Write-Host "  $jobname.pdf was not produced." -ForegroundColor Red
     }
 }
 
@@ -122,6 +132,18 @@ try {
 
     if ($Main) { Build-Document -name 'main'          -useBiber $true  }
     if ($Supp) { Build-Document -name 'supplementary' -useBiber $false }
+
+    if ($Marked) {
+        if ($Main) {
+            Build-Document -name 'main' -useBiber $true `
+                -jobname 'main-revised-marked' -marked $true
+        }
+        if ($Supp) {
+            Build-Document -name 'supplementary' -useBiber $false `
+                -jobname 'supplementary-revised-marked' -marked $true
+        }
+    }
+
     if ($Svg)  { Build-Svg }
 
     Remove-Artifacts

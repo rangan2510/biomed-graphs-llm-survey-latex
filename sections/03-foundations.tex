@@ -1,4 +1,7 @@
 \section{Foundations}
+\label{sec:foundations}
+
+\rev{The rest of this survey turns on properties that a triple store does not automatically have: qualifiers, provenance, time, and a release process. This section establishes those properties for graphs and for language models separately, because the failure modes analysed later are almost always a mismatch between the two rather than a defect in either.}
 
 \subsection{Biomedical knowledge graphs as evidence-bearing infrastructure}
 
@@ -13,6 +16,8 @@ These are causal inputs to system behavior, not catalogue entries. A literature-
 \subsection{Large language models as probabilistic interfaces and controllers}
 
 LLMs generate tokens conditional on context. Instruction tuning, preference optimization, long-context mechanisms, retrieval augmentation, structured decoding, and tool use have turned them from text generators into general interfaces and workflow controllers. In biomedical systems they may perform concept normalization, query planning, evidence selection, synthesis, explanation, and conversational interaction. Domain adaptation can improve terminology and task behavior, but it does not establish access to current, sourceable evidence.
+
+\rev{That distinction is what makes domain-pretrained generative models complements to a graph rather than substitutes for one. Med-PaLM demonstrated expert-level performance on medical examination benchmarks from parameters alone~\cite{singhal2023multimedqa}, and open models such as MEDITRON-70B~\cite{chen2023meditron} and BioMistral~\cite{labrak2024biomistral} narrowed that gap with published weights, which matters here because a locally hosted model can be version-pinned in a way a hosted endpoint cannot. None of this changes the argument. Domain pretraining improves terminology, calibration on in-domain phrasing, and instruction following, and it leaves the knowledge undated, unattributable, and updatable only by retraining. A stronger biomedical backbone raises the closed-book baseline that any graph-augmented system must beat, which makes the matched comparison of Section~\ref{sec:evaluation} more demanding rather than less necessary; the reviewed evidence that graph gains shrink as backbones strengthen~\cite{mandarapu2026controlled} is exactly this effect.}
 
 Four kinds of knowledge coexist in such systems. \emph{Parametric knowledge} is encoded in weights and is hard to inspect or update selectively. \emph{Contextual knowledge} is the documents, triples, paths, or tables placed in the prompt. \emph{Tool-accessed knowledge} is returned by graph queries, search systems, calculators, or clinical services during execution. \emph{Committed knowledge} is what gets written into a graph, record, report, or decision-support workflow. Risk climbs as information moves from parametric or contextual use into committed knowledge. A hallucinated relation in an exploratory answer is a quality failure. The same relation written to a production KG and later retrieved as established evidence is a persistent systems hazard.
 

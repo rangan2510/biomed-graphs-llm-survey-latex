@@ -39,12 +39,16 @@
 \renewcommand{\arraystretch}{1.12}
 
 % ---- Revision mark-up -------------------------------------------------
-% Text added or reworded in response to review is wrapped in \rev{...} so a
-% marked copy can be produced for the editor. Define REVCLEAN (for example
-% by switching the two definitions below) to render the same source without
-% colour for the final version.
-\newcommand{\rev}[1]{\textcolor{blue}{#1}}
-%\newcommand{\rev}[1]{#1}   % <- swap in for the clean build
+% Text added or reworded in response to review is wrapped in \rev{...}.
+% The default build is clean. To produce the marked copy for the editor,
+% compile with the REVMARKED flag set:
+%   pdflatex "\def\REVMARKED{}\input{main.tex}"
+% build.ps1 does this automatically and writes main-revised-marked.pdf.
+\ifdefined\REVMARKED
+  \newcommand{\rev}[1]{\textcolor{blue}{#1}}
+\else
+  \newcommand{\rev}[1]{#1}
+\fi
 
 \hyphenation{bio-medical know-ledge}
 

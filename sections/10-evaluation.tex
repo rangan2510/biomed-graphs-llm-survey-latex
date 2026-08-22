@@ -96,22 +96,22 @@ The literature does not support a universal claim that KGs improve LLMs. It supp
 \caption{\textbf{When adding a knowledge graph helps, when it does not, and what the published evidence shows in each case.} This is the survey's central empirical claim assembled in one place. The pattern is conditional rather than uniform. Graphs pay off when they hold knowledge the model lacks, when entity linking succeeds, and when the retrieved subgraph is small enough to use, which is why the rows reporting gains involve patient-context structure, typed path reranking, or facts genuinely novel to the model. The lower rows are the counterexamples that a survey should not omit: retrieval producing one- to two-point inconsistent gains, deeper retrieval lowering citation faithfulness, the same graph snippet helping one model and confusing another, and filtering a graph down improving results. Read together they argue for treating graph use as a decision to be made per query rather than a fixed architectural commitment.}
 \label{tab:whenhelps}
 \footnotesize
-\begin{tabularx}{\textwidth}{@{}L{4.2cm} Y Y@{}}
+\begin{tabularx}{\textwidth}{@{}L{4.0cm} Y >{\raggedright\arraybackslash}p{1.05cm} Y@{}}
 \toprule
-\textbf{Condition} & \textbf{Evidence} & \textbf{Interpretation} \\
+\textbf{Condition} & \textbf{Evidence} & \rev{\textbf{Status}} & \textbf{Interpretation} \\
 \midrule
-Patient context needs structured neighborhood retrieval & KARE reports sizable gains for mortality and readmission on MIMIC-III/IV~\cite{jiang2025kare} & Community structure collects dispersed context; retrospective accuracy is not clinical validation \\
-Diagnosis benefits from entity weighting and path reranking & medIKAL on a Chinese EMR dataset~\cite{jia2025medikal} & Helps when linking and candidate coverage are adequate; dataset- and language-specific \\
-Query is incomplete, benefits from hypothesis-guided expansion & HyKGE on Chinese medical QA~\cite{jiang2025hykge} & Parametric knowledge can aid retrieval but can also bias it toward self-confirming paths \\
-Local documents must connect to authoritative sources & MedGraphRAG vs.\ no-retrieval, text-RAG, GraphRAG~\cite{wu2025medgraphrag} & Graph organization aids source-linked retrieval; sources still need claim-level entailment \\
-Decisive knowledge is outside model training & Little MedQA gain from PrimeKG, near-full recovery on counterfactual/novel facts~\cite{mandarapu2026controlled} & Marginal value depends on knowledge novelty; public facts may be redundant for strong models \\
-Ontology retrieval has high candidate coverage & Ontology retrieval beats open generation when the true disease is in the candidate set~\cite{elmofty2026ontology} & Coverage is a gating variable; low coverage should not force a graph-bounded answer \\
-Retrieval adds mostly redundant or noisy context & Small, inconsistent 1--2 point gains; distractors can hurt~\cite{nourbakhsh2026retrieval} & Retrieval success and evidence use are separate bottlenecks \\
-More evidence dilutes attribution & Citation support falls as depth rises~\cite{ma2026vericite} & Tune depth against both coverage and support precision \\
-Short snippets interact with architecture & Snippets help some LLMs, hurt others~\cite{liu2026mhgraphbench} & Serialization and interface compliance are part of the treatment \\
-Evidence is heterogeneous and incomplete & CrossDDI: PubMed covered only 40.5\% of positives~\cite{wang2026crossddi} & Deterministic arbitration aids traceability but cannot recover absent facts \\
-Scientific sources conflict & BioConflict: strong detection, brittle synthesis~\cite{kirubakaran2026bioconflict} & Flattening conflicting edges can be worse than preserving disagreement \\
-Graph has many irrelevant relations & Metapath filtering improved repurposing link prediction~\cite{ratajczak2022metapath} & More graph is not more signal; task-conditioned filtering can help \\
+Patient context needs structured neighborhood retrieval & KARE reports sizable gains for mortality and readmission on MIMIC-III/IV~\cite{jiang2025kare} & \rev{Peer rev.} & Community structure collects dispersed context; retrospective accuracy is not clinical validation \\
+Diagnosis benefits from entity weighting and path reranking & medIKAL on a Chinese EMR dataset~\cite{jia2025medikal} & \rev{Peer rev.} & Helps when linking and candidate coverage are adequate; dataset- and language-specific \\
+Query is incomplete, benefits from hypothesis-guided expansion & HyKGE on Chinese medical QA~\cite{jiang2025hykge} & \rev{Peer rev.} & Parametric knowledge can aid retrieval but can also bias it toward self-confirming paths \\
+Local documents must connect to authoritative sources & MedGraphRAG vs.\ no-retrieval, text-RAG, GraphRAG~\cite{wu2025medgraphrag} & \rev{Peer rev.} & Graph organization aids source-linked retrieval; sources still need claim-level entailment \\
+Decisive knowledge is outside model training & Little MedQA gain from PrimeKG, near-full recovery on counterfactual/novel facts~\cite{mandarapu2026controlled} & \rev{Preprint} & Marginal value depends on knowledge novelty; public facts may be redundant for strong models\rev{; single study, magnitudes indicative} \\
+Ontology retrieval has high candidate coverage & Ontology retrieval beats open generation when the true disease is in the candidate set~\cite{elmofty2026ontology} & \rev{Peer rev.} & Coverage is a gating variable; low coverage should not force a graph-bounded answer \\
+Retrieval adds mostly redundant or noisy context & Small, inconsistent 1--2 point gains; distractors can hurt~\cite{nourbakhsh2026retrieval} & \rev{Peer rev.} & Retrieval success and evidence use are separate bottlenecks \\
+More evidence dilutes attribution & Citation support falls as depth rises~\cite{ma2026vericite} & \rev{Peer rev.} & Tune depth against both coverage and support precision \\
+Short snippets interact with architecture & Snippets help some LLMs, hurt others~\cite{liu2026mhgraphbench} & \rev{Peer rev.} & Serialization and interface compliance are part of the treatment \\
+Evidence is heterogeneous and incomplete & CrossDDI: PubMed covered only 40.5\% of positives~\cite{wang2026crossddi} & \rev{Peer rev.} & Deterministic arbitration aids traceability but cannot recover absent facts \\
+Scientific sources conflict & BioConflict: strong detection, brittle synthesis~\cite{kirubakaran2026bioconflict} & \rev{Peer rev.} & Flattening conflicting edges can be worse than preserving disagreement \\
+Graph has many irrelevant relations & Metapath filtering improved repurposing link prediction~\cite{ratajczak2022metapath} & \rev{Peer rev.} & More graph is not more signal; task-conditioned filtering can help \\
 \bottomrule
 \end{tabularx}
 \end{table*}

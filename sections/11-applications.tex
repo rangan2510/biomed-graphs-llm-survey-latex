@@ -38,7 +38,7 @@ Patient-facing advice is the highest-risk application, because users may act wit
 
 \subsection{Cross-application synthesis}
 
-Table~\ref{tab:apps} summarizes the graph's contribution, the appropriate near-term output, and the evidence required before stronger claims for each application. The cross-cutting conclusion is conditional. Graphs help most when a task genuinely depends on typed relations, normalization, multi-hop structure, or computable constraints. They may add little when a current, authoritative passage answers the question directly, and they can hurt when coverage is poor, mappings are wrong, or retrieved subgraphs fill the context window without adding decisive evidence. Application evaluation must therefore include a matched text-retrieval baseline and must report when the graph is bypassed or adds no value.
+Table~\ref{tab:apps} summarizes the graph's contribution, the appropriate near-term output, and the evidence required before stronger claims for each application. The cross-cutting conclusion is conditional. Graphs help most when a task genuinely depends on typed relations, normalization, multi-hop structure, or computable constraints. They may add little when a current, authoritative passage answers the question directly, and they can hurt when coverage is poor, mappings are wrong, or retrieved subgraphs fill the context window without adding decisive evidence.\rev{ The conditions under which each of these holds, and the comparator ladder that separates them, are given in Table~\ref{tab:whenhelps} and Table~\ref{tab:attribution}.}
 
 \subsection{How mature is the evidence?}
 \label{sec:maturity}
@@ -91,16 +91,16 @@ Measured performance also belongs to the human-machine team rather than the mode
 \caption{\textbf{What the graph contributes in each application area, what such a system can defensibly output today, and what evidence a stronger claim would require.} The applications differ less in technique than in what a mistake costs. A drug--gene association proposed for laboratory follow-up is a hypothesis a researcher will test; a diagnosis suggested from a patient record can shape professional judgment; advice given directly to a patient may be acted on with no clinician in between. The middle column is therefore deliberately conservative, naming the output that current evidence supports rather than the one the technique could eventually produce, and the right column names what is missing. The pattern across rows is that graphs help most where a task genuinely turns on typed relations, normalization, or computable constraints, and least where a single current authoritative passage would answer the question directly.}
 \label{tab:apps}
 \footnotesize
-\begin{tabularx}{\textwidth}{@{}L{2.6cm} Y Y Y@{}}
+\begin{tabularx}{\textwidth}{@{}L{2.4cm} >{\raggedright\arraybackslash}p{1.5cm} Y Y Y@{}}
 \toprule
-\textbf{Application} & \textbf{Graph contribution} & \textbf{Appropriate near-term output} & \textbf{Evidence before stronger claims} \\
+\textbf{Application} & \rev{\textbf{Coupling}} & \textbf{Graph contribution} & \textbf{Appropriate near-term output} & \textbf{Evidence before stronger claims} \\
 \midrule
-Knowledge construction & Normalization, structure, qualifiers, provenance & Quarantined candidate assertions for curation & Relation-level validation, inter-rater reliability, source-stratified error analysis \\
-Discovery and repurposing & Multi-hop hypothesis space and evidence linkage & Ranked hypothesis with provenance and validation plan & Independent replication, wet-lab or preclinical confirmation, prospective utility \\
-Literature and guideline access & Concept expansion, retrieval, conflict organization & Evidence packet with dated supporting and conflicting sources & Retrieval recall, citation entailment, temporal freshness, clinician task evaluation \\
-Diagnosis and prognosis & Patient-to-concept mapping, disease paths, community context & Clinician-facing differential or risk estimate with abstention & Temporal/external validation, calibration, subgroup performance, silent then prospective deployment \\
-Trial matching & Ontology normalization and deterministic eligibility constraints & Candidate trials plus criterion-level evidence for expert review & Prospective multisite accuracy, operational impact, enrollment, equity analysis \\
-Patient communication & Terminology control and authoritative source retrieval & Bounded education and navigation & Patient safety, comprehension, reliance, accessibility, escalation, outcomes \\
+Knowledge construction & \rev{C1--C2, C5 for promotion} & Normalization, structure, qualifiers, provenance & Quarantined candidate assertions for curation & Relation-level validation, inter-rater reliability, source-stratified error analysis \\
+Discovery and repurposing & \rev{C2--C4} & Multi-hop hypothesis space and evidence linkage & Ranked hypothesis with provenance and validation plan & Independent replication, wet-lab or preclinical confirmation, prospective utility \\
+Literature and guideline access & \rev{C1--C2} & Concept expansion, retrieval, conflict organization & Evidence packet with dated supporting and conflicting sources & Retrieval recall, citation entailment, temporal freshness, clinician task evaluation \\
+Diagnosis and prognosis & \rev{C1--C2 if audited, C3 if throughput dominates} & Patient-to-concept mapping, disease paths, community context & Clinician-facing differential or risk estimate with abstention & Temporal/external validation, calibration, subgroup performance, silent then prospective deployment \\
+Trial matching & \rev{C5, deterministic verifier} & Ontology normalization and deterministic eligibility constraints & Candidate trials plus criterion-level evidence for expert review & Prospective multisite accuracy, operational impact, enrollment, equity analysis \\
+Patient communication & \rev{C1, bounded scope} & Terminology control and authoritative source retrieval & Bounded education and navigation & Patient safety, comprehension, reliance, accessibility, escalation, outcomes \\
 \bottomrule
 \end{tabularx}
 \end{table*}

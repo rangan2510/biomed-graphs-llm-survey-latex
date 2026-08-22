@@ -50,11 +50,7 @@ Operations: drift, outage, unapproved change & Silent degradation or uncontrolle
 \end{tabularx}
 \end{table*}
 
-\subsection{Circular self-validation}
-
-Bidirectional systems carry a failure mode that unidirectional ones do not. An LLM proposes an edge, the edge is committed to the graph, and a later LLM retrieves it as though it were independent evidence. Repetition across agents or model calls does not create independent confirmation; the system has cited its own derivative output, and the citation can be syntactically correct while being epistemically circular. Self-consistency checks and agreement among closely related models amplify the effect rather than detecting it, because correlated errors look like corroboration.
-
-The control is a lifecycle for candidate knowledge that is distinct from curated knowledge. Proposed edges enter a quarantine zone carrying explicit generated-by, source, model, prompt, and confidence metadata. Promotion requires evidence not derived from the same model output, a policy-defined source threshold, schema checks, and human approval for high-impact relation types. Downstream retrieval excludes candidate edges by default or labels them unambiguously, graph commits are immutable and reversible, and an edge derived from an LLM-generated summary retains lineage to the original article, because the summary is not a second source. Agent tools should hold least privilege: retrieval agents get read access, extraction agents may write candidates, and only an authorized release process writes asserted edges.
+\rev{Circular self-validation, the hazard in the closed-loop update row of Table~\ref{tab:hazards}, is treated with its mechanism and its four mandatory controls in Section~\ref{sec:bidirectional}. The verification evidence a reviewer or auditor should ask for, namely a lineage query, a simulated circularity test, and a reversible update drill, is listed in that row.}
 
 \subsection{Privacy as a graph-structural problem}
 

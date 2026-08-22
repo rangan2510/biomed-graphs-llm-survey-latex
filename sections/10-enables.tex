@@ -58,8 +58,41 @@ Contraindication-aware retrieval is expressible on PrimeKG and is not being eval
 
 Deterministic arbitration over agent output has one strong precedent~\cite{loaizabonilla2026trialmatch} and one clear architectural argument in its favor~\cite{wang2026crossddi}, and it remains rare. For any task where eligibility, dosing, or interaction can be expressed as a rule, letting agents gather evidence and letting a deterministic component decide is both more auditable and more stable across model versions than asking a generator to arbitrate.
 
+\rev{\subsection{Representative systems side by side}}
+
+\rev{Table~\ref{tab:systems} places twelve representative systems on the dimensions a practitioner has to decide: the graph and its type, the coupling depth of Section~\ref{sec:taxonomy}, the target application, the advantage as the authors report it, and the limitation that bounds the claim. Two patterns in the table matter more than any individual row.}
+
+\rev{First, the backbone column is almost empty. Of these twelve systems, none reports the language model and version behind its headline result in a form that would let a reader reproduce it; the only named models in the whole set are the GPT-4 baselines that the trial-matching study measured against. That is not an omission in this survey but a property of the literature, and it is the same reporting failure that Section~\ref{sec:failure} demands of deployed systems. A graph-augmented result stated without its backbone cannot be reproduced, because the same graph in front of a stronger model is a different experiment, and the shrinking-gain effect discussed in Section~\ref{sec:foundations} makes that difference decisive rather than incidental.}
+
+\rev{Second, coupling depth clusters at C1 and C2. Eleven of the twelve keep the graph outside the weights, which preserves auditability and in-place correction. Only the trial-matching platform reaches C5, and it is also the only one of the twelve with prospective clinician-facing evaluation. Whether that association is causal or an artifact of who builds deployable systems cannot be settled from twelve cases, but it is the clearest signal in the table.}
+
+\begin{table*}[!t]
+\centering
+\caption{\rev{\textbf{Twelve representative systems on the dimensions a practitioner must choose between.} Coupling depth follows the C-levels of Section~\ref{sec:taxonomy}. ``Backbone'' records the language model and version as reported by the source paper; \emph{n.r.} means not reported, which is the value for every system here and is itself the finding discussed in the text. Advantages are as claimed by the authors, with figures quoted only where the source states them; limitations are the constraints that bound each claim. Evidence maturity follows the E-levels of Section~\ref{sec:maturity}.}}
+\label{tab:systems}
+\footnotesize
+\begin{tabularx}{\textwidth}{@{}L{2.05cm} L{2.5cm} >{\raggedright\arraybackslash}p{0.85cm} >{\raggedright\arraybackslash}p{0.7cm} Y Y@{}}
+\toprule
+\rev{\textbf{System}} & \rev{\textbf{Graph (type)}} & \rev{\textbf{Coup.}} & \rev{\textbf{Back.}} & \rev{\textbf{Reported advantage}} & \rev{\textbf{Bounding limitation}} \\
+\midrule
+\rev{KG-RAG~\cite{soman2024kgrag}} & \rev{SPOKE (curated, cross-scale)} & \rev{C1} & \rev{n.r.} & \rev{Cut token use by more than half with no loss on the tested tasks} & \rev{Efficient evidence packaging, not evidence of symbolic reasoning} \\
+\rev{KRAGEN~\cite{matsumoto2024kragen}} & \rev{n.r.} & \rev{C1} & \rev{n.r.} & \rev{Graph-of-thought decomposition with per-subproblem retrieval} & \rev{Commits early; a wrong first plan cannot be recovered by later retrieval} \\
+\rev{DR.KNOWS~\cite{zuo2025drknows}} & \rev{UMLS (ontology)} & \rev{C2} & \rev{n.r.} & \rev{Gains on MIMIC-III and an institutional dataset} & \rev{Incorrect starting concepts a recurring error cause; E1} \\
+\rev{medIKAL~\cite{jia2025medikal}} & \rev{UMLS (ontology)} & \rev{C2} & \rev{n.r.} & \rev{Recovers diseases absent from retrieved paths} & \rev{Blurs attribution between graph and initial guess; language-specific; E1} \\
+\rev{KARE~\cite{jiang2025kare}} & \rev{Multi-source concept graph} & \rev{C1--C2} & \rev{n.r.} & \rev{Gains on mortality and readmission, MIMIC-III/IV} & \rev{Four mechanisms confounded; label-derived traces need a leakage check; E1} \\
+\rev{MedRAG~\cite{zhao2025medrag}} & \rev{Four-tier diagnostic hierarchy (purpose-built)} & \rev{C2} & \rev{n.r.} & \rev{Discriminates diseases with overlapping presentations} & \rev{Narrow by construction; private evaluation limits replication; E1} \\
+\rev{MedGraphRAG~\cite{wu2025medgraphrag}} & \rev{User documents plus authoritative sources} & \rev{C2} & \rev{n.r.} & \rev{Nine QA benchmarks, two fact-checking sets, long-form generation} & \rev{Benchmark-level only; no claim-level entailment or clinician study; E1} \\
+\rev{KGARevion~\cite{su2025kgarevion}} & \rev{Grounded domain graph (n.r.)} & \rev{C5} & \rev{n.r.} & \rev{Parametric recall with graph-enforced authority} & \rev{Ceiling is graph completeness; ``verified'' means present in this snapshot} \\
+\rev{ESCARGOT~\cite{matsumoto2025escargot}} & \rev{AlzKB (disease graph)} & \rev{C2} & \rev{n.r.} & \rev{Gains over conventional RAG on open-ended questions} & \rev{An inspectable trace is not a faithful scientific explanation} \\
+\rev{AMG-RAG~\cite{rezaei2025amgrag}} & \rev{Self-built, continuously updated} & \rev{C5} & \rev{n.r.} & \rev{Automated construction and update with current-evidence retrieval} & \rev{Largest untested risk surface; no update metrics reported} \\
+\rev{MedKGent~\cite{zhang2025medkgent}} & \rev{Self-built from ${>}10$M PubMed abstracts} & \rev{C5} & \rev{n.r.} & \rev{Daily graph series with conflict resolution across decades} & \rev{Captures publication time, not clinical time; preprint} \\
+\rev{Oncology trial matching~\cite{loaizabonilla2026trialmatch}} & \rev{Oncology KG (proprietary)} & \rev{C5} & \rev{n.r.} & \rev{F1 0.82 vs 0.47 GPT-4 zero-shot and 0.67 CoT; 3804 patients; screening 120 to 30 min} & \rev{Endpoint was eligibility, not enrollment or outcome; proprietary; developer-affiliated authors; E4} \\
+\bottomrule
+\end{tabularx}
+\end{table*}
+
 \subsection{Choosing a configuration for a task}
 
-The preceding analysis supports a short design path. Start from the question type. Relation-specific and mechanistic questions want typed path retrieval on a schema-rich graph. Broad synthesis and patient-context enrichment want community or hierarchical retrieval. Questions turning on qualifiers, dose, population, or study design want hybrid graph-and-text retrieval, because a triple will not carry those and a passage will. Questions answerable by an exact constraint want symbolic query execution with the model confined to translating the question, and an eligibility or interaction decision wants a deterministic arbiter rather than a generator.
+The preceding analysis supports a short design path. Start from the question type. Relation-specific and mechanistic questions want typed path retrieval on a schema-rich graph\rev{, which is coupling C1 with a symbolic component}. Broad synthesis and patient-context enrichment want community or hierarchical retrieval. Questions turning on qualifiers, dose, population, or study design want hybrid graph-and-text retrieval, because a triple will not carry those and a passage will. Questions answerable by an exact constraint want symbolic query execution with the model confined to translating the question, and an eligibility or interaction decision wants a deterministic arbiter rather than a generator\rev{, which is C5 with the verifier outside the model}.
 
 Then check three properties of the candidate graph before committing: whether it contains the decisive entities and relations for the target cohort, whether it carries assertion-level provenance if the output must be attributable, and whether its update cadence matches how fast the underlying knowledge moves. A graph that fails the first is the wrong graph. A graph that fails the second forecloses claim-level attribution regardless of what the generator does. A graph that fails the third will be confidently wrong about anything recent, and no retrieval mechanism repairs that.

@@ -24,11 +24,14 @@
 \renewcommand{\thefigure}{S\arabic{figure}}
 
 % ---- Revision mark-up -------------------------------------------------
-% Matches the macro in main.tex: material added in response to review is
-% wrapped in \rev{...}. Swap the definitions for an unmarked final version.
+% Matches the macro in main.tex. Clean by default; set REVMARKED to colour
+% the additions. build.ps1 handles both builds.
 \usepackage{xcolor}
-\newcommand{\rev}[1]{\textcolor{blue}{#1}}
-%\newcommand{\rev}[1]{#1}   % <- swap in for the clean build
+\ifdefined\REVMARKED
+  \newcommand{\rev}[1]{\textcolor{blue}{#1}}
+\else
+  \newcommand{\rev}[1]{#1}
+\fi
 
 \title{Supplementary Material for\\[4pt]
 \large Biomedical Knowledge Graphs and Large Language Models:\\A Critical Engineering Survey}

@@ -63,6 +63,6 @@
 \node[onto] at (8.4,-6.35) {UMLS, SNOMED CT, RxNorm, LOINC, HPO, MONDO: the normalization layer every graph above depends on for entity identity};
 \end{tikzpicture}%
 }
-\caption{The representative resources, grouped by how each graph was built and ordered downward by scale from molecular to clinical, with the systems built on each shown beneath it. Entries marked in orange have no agentic system in the reviewed literature despite carrying the provenance and temporal metadata an agent needs, which is where the clearest near-term opportunity sits. The terminologies are drawn as a band rather than as separate nodes because every graph above them depends on them for entity identity, so an error at that layer propagates everywhere.}
+\caption{The representative resources, grouped by how each graph was built and ordered downward by scale from molecular to clinical, with the systems built on each shown beneath it. Entries marked in orange have no agentic system in the reviewed literature despite carrying the provenance and temporal metadata an agent needs. They therefore represent a clear near-term opportunity. The terminologies are drawn as a band rather than as separate nodes because every graph above them depends on that layer for entity identity. A terminology error can therefore propagate through every dependent graph.}
 \label{fig:datamap}
 \end{figure*}

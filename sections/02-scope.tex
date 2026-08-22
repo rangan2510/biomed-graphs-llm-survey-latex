@@ -1,10 +1,10 @@
 \section{Review Scope and Method}
 
-\rev{The introduction argued that the graph has to earn its place. Deciding that for a given system requires stating what counts as a system, what counts as evidence about one, and which questions this review declines to answer. This section fixes those boundaries before the analysis begins.}
+\rev{The graph has to earn its place in a given system. Assessing whether it does requires clear definitions of a system, the evidence used to evaluate it, and the questions outside this review. This section defines those boundaries before the analysis begins.}
 
 \subsection{Review type and objectives}
 
-This is a critical engineering survey, not a statistical meta-analysis. The literature mixes question answering, diagnosis, code prediction, link prediction, information extraction, drug repurposing, workflow support, and graph curation. Outcomes reported as exact match, F1, area under the curve, recall, clinician preference, or case-study plausibility are not commensurable, and pooling them would produce a precise-looking but invalid effect estimate. The goal instead is to identify architectures, fix comparable engineering dimensions, weigh the strength of claimed benefits, and expose missing validation.
+This is a critical engineering survey, not a statistical meta-analysis. The literature mixes question answering, diagnosis, code prediction, link prediction, information extraction, drug repurposing, workflow support, and graph curation. Outcomes reported as exact match, F1, area under the curve, recall, clinician preference, or case-study plausibility are not commensurable, and pooling them would produce a precise-looking but invalid effect estimate. The goal instead is to identify architectures, define comparable engineering dimensions, weigh the strength of claimed benefits, and expose missing validation.
 
 Foundational knowledge-graph and ontology work appears as background. The method synthesis concentrates on the period since instruction-tuned generative models became widely available, because that is when the coupling patterns discussed here took their current form.
 
@@ -14,17 +14,17 @@ The inclusion boundary is as follows. A \emph{knowledge graph} is an identifiabl
 
 \subsection{How systems were selected}
 
-This survey is built around representative systems rather than exhaustive coverage. The aim is that an engineer designing a graph-grounded clinical system can read it, find the two or three papers closest to their situation, and understand what those papers did, what they proved, and what they left open. Exhaustive enumeration works against that goal, because a list of ninety systems with one sentence each conveys less than a dozen analyzed properly.
+This survey is built around representative systems rather than exhaustive coverage. An engineer designing a graph-grounded clinical system should be able to find the two or three papers closest to the intended setting and understand what they did, what they proved, and what they left open. A list of ninety systems with one sentence each conveys less than a dozen analyzed properly.
 
 A system earned a place when it did at least one of the following: introduced a coupling mechanism that others have since built on; exposed a failure mode that changes how the class of systems should be evaluated; established a resource or benchmark that later work depends on; or carried its evaluation past offline benchmarking into clinician-facing or prospective use. Where several papers make the same architectural move, we discuss the clearest instance and treat the rest as variants. Papers were left out when the ``graph'' was a document similarity network with no typed semantics, when the model was neither generative nor tool-using, when the biomedical setting was incidental, or when the graph-model interaction was described but not implemented.
 
-\rev{The sampling frame behind those judgments was built from five conjunctive queries run against arXiv, PubMed, OpenAlex, and DBLP in August 2026, which returned 1879 records and 1147 distinct works after deduplication, of which 105 are cited here. Screening was purposive rather than systematic, and the criteria above were applied by the authors without independent duplicate assessment, so we report the frame and the criteria rather than a stage-by-stage exclusion count. The full query strings, per-interface yields, and the verification procedure applied to every retained reference are given in the supplementary material~\cite{supplementary}.}
+\rev{The sampling frame behind those judgments came from five conjunctive queries run against arXiv, PubMed, OpenAlex, and DBLP in August 2026. The searches returned 1879 records and 1147 distinct works after deduplication; 105 of those works are cited here. Screening was purposive rather than systematic, and the authors applied the criteria above without independent duplicate assessment. We therefore report the frame and criteria rather than a stage-by-stage exclusion count. The full query strings, per-interface yields, and the verification procedure applied to every retained reference are given in the supplementary material~\cite{supplementary}.}
 
 Peer-reviewed work carries the argument. Preprints appear where they introduce a resource or a result that changes what the field currently believes, and they are labeled as preprints at the point of use so that a reader can weigh them accordingly.
 
 \subsection{What this survey does not cover}
 
-Three boundaries are worth stating. We do not attempt a quantitative meta-analysis, because the outcomes are not commensurable and pooling them would produce a precise-looking number with no defensible interpretation. We do not rank systems by headline score, because the comparisons behind those scores are usually confounded by corpus, generator, and context budget. And we treat vendor-specific model performance as tied to a particular model version rather than as a durable property of the architecture, since a hosted endpoint can change without notice.
+Three boundaries are worth stating. The review does not attempt a quantitative meta-analysis because the outcomes are not commensurable, as discussed above. Nor does it rank systems by headline score, since those comparisons are usually confounded by corpus, generator, and context budget. Vendor-specific model performance is treated as tied to a particular model version rather than as a durable property of the architecture, since a hosted endpoint can change without notice.
 
 \subsection{Evidence extraction and appraisal}
 

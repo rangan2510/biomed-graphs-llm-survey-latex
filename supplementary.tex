@@ -55,29 +55,28 @@ and the limits of the standard benchmarks.
 
 \rev{Candidate work was identified through five conjunctive queries issued against four public
 indexes: arXiv, PubMed, OpenAlex, and DBLP. Each query required a knowledge-graph term and a
-language-model term to co-occur, restricted to the biomedical domain, and PubMed and OpenAlex were
-filtered to 2023 onward at the query level. Searches were run on 22 August 2026;
-Table~\ref{tab:ssearch} reports the yield. Records were deduplicated on DOI where available, then on
-arXiv identifier, then on normalised title, which resolved 823, 263, and 61 records respectively and
-left three without a usable identifier.}
+language-model term to co-occur in a biomedical context, and PubMed and OpenAlex were filtered to
+2023 onward at the query level. Searches were run on 22 August 2026;
+Table~\ref{tab:ssearch} reports the yield. Deduplication resolved 823 records by DOI, 263 by arXiv
+identifier, and 61 by normalised title, leaving three without a usable identifier.}
 
-\rev{The result is a reproducible sampling frame, not a systematic review. Screening against the
-criteria in Section~II of the main paper was performed by the authors without independent duplicate
-assessment, and titles and abstracts were read in a single pass, so no per-stage exclusion counts are
-reported. Coverage is deliberately purposive: the review analyses a small number of representative
-systems in depth rather than enumerating the frame, for the reason given in the main paper, and we
-therefore make no claim of conformance to systematic-review reporting standards such as PRISMA
-(Page et al., \emph{BMJ}, 2021). Every reference retained was then checked against a canonical record.
-Author lists, titles, venues, and identifiers were verified through the Crossref, arXiv, OpenAlex,
-DBLP, Semantic Scholar, bioRxiv, and PubMed interfaces together with the ACL Anthology and PMLR, and
-the publication status of every preprint was re-checked so that peer-reviewed and preprint evidence
-could be distinguished at the point of use.}
+\rev{The result is a reproducible sampling frame, not a systematic review. The authors screened
+titles and abstracts against the criteria in Section~II of the main paper in a single pass, without
+independent duplicate assessment. We therefore report no per-stage exclusion counts. Coverage is
+deliberately purposive: as explained in Section~II-C of the main paper, the review analyses a small
+number of representative systems in depth rather than enumerating the frame. We make no claim of
+conformance to systematic-review reporting standards such as PRISMA (Page et al., \emph{BMJ}, 2021).
+Every retained reference was then checked against a canonical record. Author lists, titles, venues,
+and identifiers were verified through the Crossref, arXiv, OpenAlex, DBLP, Semantic Scholar,
+bioRxiv, and PubMed interfaces together with the ACL Anthology and PMLR. The publication status of
+every preprint was re-checked so that peer-reviewed and preprint evidence could be distinguished at
+the point of use.}
 
 \begin{table}[!ht]
 \caption{\rev{Search yield by query, run 22 August 2026. Records are counts returned by each
-interface, so a work indexed in more than one place is counted more than once; the distinct column
-is after deduplication within the query. Full query strings are in the replication log accompanying
-this document.}}
+interface, so a work indexed in more than one place is counted more than once. The \emph{Distinct}
+column reports the count after deduplication within each query. Full query strings are in the
+replication log accompanying this document.}}
 \label{tab:ssearch}
 \centering
 \small
@@ -111,12 +110,12 @@ scheduled releases, and hosted model endpoints are replaced without notice. Two 
 same published pipeline against the same named graph and get different answers, because one of them
 downloaded it six months later.
 
-So the artifact to specify is the configuration, not the model: $C = (M, P, G, T, R, V, I)$, being
-the model and revision, the prompt and tool policy, the graph snapshot and schema, the terminology
-releases, the retrieval policy, the verification layer, and the interface. Changing any element
+So the artifact to specify is the configuration, not the model: $C = (M, P, G, T, R, V, I)$, where
+the elements denote the model and revision, the prompt and tool policy, the graph snapshot and schema,
+the terminology releases, the retrieval policy, the verification layer, and the interface. Changing any element
 produces a new system unless equivalence is shown.
 
-Errors also do not stay local, which is what Fig.~\ref{fig:sfailure} shows. A wrong edge admitted at
+Fig.~\ref{fig:sfailure} shows how errors propagate. A wrong edge admitted at
 construction is indexed like any other, retrieved when relevant, and cited accurately by a generator
 with no way to know it is wrong.
 
@@ -165,10 +164,10 @@ not only model performance.}
 \section{The reporting package}
 \label{s:artifacts}
 
-What another group needs in order to reconstruct both the knowledge boundary and the retrieval
+Another group needs enough information to reconstruct both the knowledge boundary and the retrieval
 behavior of a published system. Table~\ref{tab:sreport} gives the items by category. Three deserve
 emphasis. The graph is the part most often under-specified, and a schema that cannot express negation
-or population drops them silently. Per-instance retrieval traces are the only way to tell a system that
+or population qualifiers drops those distinctions silently. Per-instance retrieval traces are the only way to tell a system that
 retrieved the right evidence and misused it from one that never retrieved it. And if any evaluation
 question was generated from the graph, that has to be stated, because agreement with the graph that
 supplied the question is close to guaranteed.
@@ -198,9 +197,9 @@ Change record & Graph updates, retractions, endpoint changes, prompt amendments,
 
 Releasing a final answer and an aggregate metric makes retrieval error and circular evidence impossible
 to audit, so the log needs a record per evaluation instance. Table~\ref{tab:srecord} gives the fields.
-Where licensing or patient privacy prevents release, provide hashes, synthetic examples, access
+Where licensing restrictions or patient privacy prevent release, provide hashes, synthetic examples, access
 instructions, and a data dictionary. Licensed terminology strings should not be redistributed beyond
-their terms, and credentialed clinical data should never appear in a public trace.
+the applicable license terms, and credentialed clinical data should never appear in a public trace.
 
 \begin{table}[!ht]
 \centering
@@ -237,11 +236,11 @@ fields are what allow a result to be checked for leakage after publication.}
 \section{Grading reproducibility}
 \label{s:repro}
 
-Reported as a binary, reproducibility loses information. A paper that describes an architecture and
+Binary reporting obscures important differences in reproducibility. A paper that describes an architecture and
 releases nothing differs from one that releases code but omits the graph snapshot, and both differ from
 one whose estimates an independent group has reproduced. Table~\ref{tab:srepro} grades these separately.
 
-The top level is what matters for clinical claims. Reproducing a number on the same data shows the
+R4 is the level that matters for clinical claims. Reproducing a number on the same data shows the
 pipeline was described accurately. Reproducing the direction and magnitude on a later time window,
 another institution, or a newer snapshot shows the finding survives what actually changes in
 deployment. Most current work reaches R1 or R2. Proprietary model use does not preclude a good grade,
@@ -359,9 +358,9 @@ retrieved subgraphs, logs, and human feedback, all of which belong in the data i
 
 Legal obligations vary by jurisdiction, and meeting them is necessary rather than sufficient: a
 compliance label does not stop a graph from leaking structure. Fig.~\ref{fig:sprivacy} gives the
-architecture. Separate the population-level graph from patient graphs, authorize at query time against
-the smallest subgraph that answers the question, and treat anything derived from a patient graph as
-inheriting its sensitivity.
+architecture. Separate the population-level graph from patient graphs, authorize access at query time
+according to purpose, role, and sensitivity, and expose only the smallest subgraph that answers the
+question. Treat anything derived from a patient graph as inheriting its sensitivity.
 
 \begin{figure}[!ht]
 \centering
@@ -406,30 +405,30 @@ document the data flow for every processor and model provider. Set retention lim
 retrieved context, embeddings, logs, and feedback. Filter output and control egress against
 cross-patient disclosure. Provide auditable consent, access, correction, and deletion workflows where
 they apply. Then attack the result with membership, reconstruction, and linkage tests. Federated
-deployment reduces central data movement without guaranteeing privacy, since model updates,
-gradients, graph statistics, and query patterns can each leak, so evaluate any privacy-enhancing
-technology against a stated threat model rather than adopting it as a label.
+deployment reduces central data movement without guaranteeing privacy. Model updates, gradients,
+graph statistics, and query patterns can each leak. Any privacy-enhancing technology should therefore
+be evaluated against a stated threat model rather than assumed to provide privacy.
 
 % =====================================================================
 \section{Monitoring a system whose knowledge keeps changing}
 \label{s:monitoring}
 
-A single accuracy measure is too slow and too coarse: too slow because it aggregates over a window,
-too coarse because slack at one stage masks a deficit at another. A degradation that starts in the
+A single accuracy measure aggregates over too long a window and can hide stage-specific degradation.
+Stronger performance at one stage may mask a decline at another. A degradation that starts in the
 graph will not show at the output for some time. Monitoring therefore has to be stage-local, and
 Table~\ref{tab:smonitor} gives the signals.
 
-What matters more than the list is what happens when a signal moves. Set every threshold in advance
-and map it to a response: investigate, roll back, suspend, or fall back to a restricted mode. Rerun
+Set every threshold in advance and map a crossing to a response: investigate, roll back, suspend, or
+fall back to a restricted mode. Rerun
 sentinel cases after every material configuration change, since a series of individually harmless
-updates can drift a system a long way without tripping any single threshold. For a dynamic evidence
+updates can shift a system substantially without tripping any single threshold. For a dynamic evidence
 graph, retrieve from approved immutable snapshots and promote a new one only after regression testing;
 retrieving from a live graph means behavior changes without a release.
 
-Incident response needs traceability both ways. From a harmful output back to the inputs, mappings,
-retrieved edges, model, policy, and user actions. From a corrupted source forward to every release and
-output that depended on it. A system with only the first can explain one failure and cannot bound its
-blast radius.
+Incident response needs traceability in both directions: from a harmful output back to the inputs,
+mappings, retrieved edges, model, policy, and user actions, and from a corrupted source forward to
+every release and output that depended on it. A system with only the first can explain one failure but
+cannot identify every affected output.
 
 \begin{table}[!ht]
 \centering
@@ -462,10 +461,10 @@ Operations and security & Availability, tail latency, timeouts, cost, access ano
 
 Each benchmark measures something narrower than its name suggests, so no single one validates a
 graph-grounded clinical system. Extraction benchmarks do not establish the accuracy of the integrated
-graph. Link prediction does not establish that a novel hypothesis is true, still less that a drug
-works. Medical question answering does not establish workflow performance, patient outcomes, or freedom
-from memorization. Retrieval benchmarks do not isolate a graph-derived benefit without a matched
-text-retrieval arm. Graph-comprehension benchmarks say nothing about clinical validity. Domain graph
+graph, and link prediction cannot show that a novel hypothesis is true, still less that a drug works.
+Medical question answering provides no evidence of workflow performance, patient outcomes, or freedom
+from memorization. A matched text-retrieval arm is needed for retrieval benchmarks to isolate a
+graph-derived benefit. Graph-comprehension benchmarks say nothing about clinical validity. Domain graph
 reasoning agrees with a source graph, errors included. Temporal and contamination-resistant benchmarks
 are early evidence, not prospective safety.
 
@@ -485,8 +484,8 @@ reporting the result as a property of the method rather than of the pairing.
 Most leakage routes here inflate the graph arm rather than both arms equally, which makes leakage a
 threat to the attribution of the benefit and not just its size. If evaluation questions were generated
 from the inference graph, the graph arm is scored on reconstructing its own input while the closed-book
-arm is not. The measured benefit is then an artifact of the design, and no downstream statistical care
-recovers from it.
+arm is not. The measured benefit is then an artifact of the design, and no downstream statistical
+adjustment can recover an unbiased estimate.
 
 Table~\ref{tab:sleak} lists the mechanisms and controls. Two have no analogue in conventional
 evaluation. \emph{Ontology leakage} occurs when a label sits in the definitions or synonyms supplied to
@@ -494,9 +493,9 @@ the model, turning classification into lookup. \emph{Model-mediated circularity}
 family builds the edges, writes the questions, answers them, and judges the answers; correlated errors
 then read as agreement, and self-consistency checks amplify rather than detect it.
 
-The concern is empirical. Models trained with medically harmful misinformation retained ordinary
-benchmark performance, so the benchmarks missed a clinically important degradation, and removing
-train-test redundancies changes embedding-model results on biomedical graphs. A random held-out edge
+Models trained with medically harmful misinformation retained ordinary benchmark performance, so the
+benchmarks missed a clinically important degradation. Removing train-test redundancies also changes
+embedding-model results on biomedical graphs. A random held-out edge
 does not simulate future discovery.
 
 \begin{table}[!ht]

@@ -1,11 +1,11 @@
 \subsection{Relationship to prior surveys}
 \label{sec:priorsurveys}
 
-Existing surveys establish the field and leave an engineering-evidence gap. Table~\ref{tab:priorsurveys} compares the closest works and states what this survey adds.
+Existing surveys organize the field mainly by the direction of knowledge flow, leaving several engineering and evidence questions unresolved. Table~\ref{tab:priorsurveys} compares the closest works and states what this survey adds.
 
 \begin{table*}[!t]
 \centering
-\caption{\textbf{How this survey differs from the closest existing syntheses.} Prior reviews establish the field and organize it mainly by the direction knowledge flows, that is, whether the graph improves the model or the model improves the graph. That distinction is real but coarse: it groups a system that pastes triples into a prompt with one that trains a graph-aware encoder, verifies claims, and versions its evidence. The rightmost column states what remains once directionality is accounted for, which is the engineering material this survey supplies.}
+\caption{\textbf{How this survey differs from the closest existing syntheses.} Prior reviews organize the field mainly by the direction knowledge flows, that is, whether the graph improves the model or the model improves the graph. That distinction is real but coarse: it groups a system that pastes triples into a prompt with one that trains a graph-aware encoder, verifies claims, and versions its evidence. The rightmost column identifies the engineering questions that remain after directionality is accounted for.}
 \label{tab:priorsurveys}
 \footnotesize
 \begin{tabularx}{\textwidth}{@{}L{3.0cm} L{3.6cm} Y Y@{}}
@@ -22,4 +22,4 @@ GraphRAG survey, 2025~\cite{graphrag2025survey} & General graph RAG & Broad tech
 \end{tabularx}
 \end{table*}
 
-Three choices set this synthesis apart. First, directionality is kept but crossed with lifecycle and coupling depth. Two systems can both be ``KG-enhanced LLMs'' while one merely pastes triples into a prompt and the other trains a graph-aware representation, runs iterative queries, verifies claims, and logs evidence versions. Grouping them without more resolution hides their engineering differences. Second, evaluation is decomposed so that improvement or failure can be located. Third, evidence maturity and governance are treated as technical properties. Version locking, provenance capture, rollback, access control, and workflow monitoring are not afterthoughts bolted on for ethics review; they decide whether results can be reproduced and whether a deployed system can be controlled.
+This synthesis retains directionality but crosses it with lifecycle and coupling depth. Two systems can both be ``KG-enhanced LLMs'' while one merely pastes triples into a prompt and the other trains a graph-aware representation, runs iterative queries, verifies claims, and logs evidence versions. Grouping them without more resolution hides their engineering differences. The evaluation framework also locates where improvement or failure occurs. Evidence maturity and governance are treated as technical properties: version locking, provenance capture, rollback, access control, and workflow monitoring decide whether results can be reproduced and whether a deployed system can be controlled.

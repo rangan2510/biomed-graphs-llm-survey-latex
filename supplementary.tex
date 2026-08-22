@@ -23,6 +23,13 @@
 \renewcommand{\thetable}{S\arabic{table}}
 \renewcommand{\thefigure}{S\arabic{figure}}
 
+% ---- Revision mark-up -------------------------------------------------
+% Matches the macro in main.tex: material added in response to review is
+% wrapped in \rev{...}. Swap the definitions for an unmarked final version.
+\usepackage{xcolor}
+\newcommand{\rev}[1]{\textcolor{blue}{#1}}
+%\newcommand{\rev}[1]{#1}   % <- swap in for the clean build
+
 \title{Supplementary Material for\\[4pt]
 \large Biomedical Knowledge Graphs and Large Language Models:\\A Critical Engineering Survey}
 \author{R. Das \and S. Ghosh \and U. B. Maulik \and S. Dasgupta \and S. Bandyopadhyay  \and U. Maulik }
@@ -36,7 +43,60 @@
 for grading reproducibility, a data card for a biomedical graph, the criteria for each step up the
 evidence-maturity ladder, a privacy architecture, the signals worth monitoring after deployment,
 and the limits of the standard benchmarks.
+\rev{It also records the search and screening procedure behind the review.}
 \end{abstract}
+
+% =====================================================================
+\rev{\section{Search and screening}}
+\label{s:search}
+
+\rev{Candidate work was identified through five conjunctive queries issued against four public
+indexes: arXiv, PubMed, OpenAlex, and DBLP. Each query required a knowledge-graph term and a
+language-model term to co-occur, restricted to the biomedical domain, and PubMed and OpenAlex were
+filtered to 2023 onward at the query level. Searches were run on 22 August 2026;
+Table~\ref{tab:ssearch} reports the yield. Records were deduplicated on DOI where available, then on
+arXiv identifier, then on normalised title, which resolved 823, 263, and 61 records respectively and
+left three without a usable identifier.}
+
+\rev{The result is a reproducible sampling frame, not a systematic review. Screening against the
+criteria in Section~II of the main paper was performed by the authors without independent duplicate
+assessment, and titles and abstracts were read in a single pass, so no per-stage exclusion counts are
+reported. Coverage is deliberately purposive: the review analyses a small number of representative
+systems in depth rather than enumerating the frame, for the reason given in the main paper, and we
+therefore make no claim of conformance to systematic-review reporting standards such as PRISMA
+(Page et al., \emph{BMJ}, 2021). Every reference retained was then checked against a canonical record.
+Author lists, titles, venues, and identifiers were verified through the Crossref, arXiv, OpenAlex,
+DBLP, Semantic Scholar, bioRxiv, and PubMed interfaces together with the ACL Anthology and PMLR, and
+the publication status of every preprint was re-checked so that peer-reviewed and preprint evidence
+could be distinguished at the point of use.}
+
+\begin{table}[!ht]
+\caption{\rev{Search yield by query, run 22 August 2026. Records are counts returned by each
+interface, so a work indexed in more than one place is counted more than once; the distinct column
+is after deduplication within the query. Full query strings are in the replication log accompanying
+this document.}}
+\label{tab:ssearch}
+\centering
+\small
+\begin{tabularx}{\columnwidth}{@{}Yrrrrrr@{}}
+\toprule
+\rev{\textbf{Query}} & \rev{\textbf{arX}} & \rev{\textbf{PM}} & \rev{\textbf{OA}} & \rev{\textbf{DBLP}} & \rev{\textbf{Recs}} & \rev{\textbf{Distinct}} \\
+\midrule
+\rev{Q1 Knowledge graph with LLM, biomedical}   & \rev{207} & \rev{288} & \rev{366} & \rev{13} & \rev{874} & \rev{793} \\
+\rev{Q2 Graph retrieval-augmented generation}   & \rev{65}  & \rev{77}  & \rev{119} & \rev{5}  & \rev{266} & \rev{245} \\
+\rev{Q3 Clinical decision support and diagnosis}& \rev{88}  & \rev{40}  & \rev{126} & \rev{0}  & \rev{254} & \rev{243} \\
+\rev{Q4 LLM-driven graph construction}          & \rev{118} & \rev{15}  & \rev{27}  & \rev{3}  & \rev{163} & \rev{154} \\
+\rev{Q5 Graph-augmented medical question answering} & \rev{90} & \rev{40} & \rev{159} & \rev{33} & \rev{322} & \rev{298} \\
+\midrule
+\rev{\textbf{Across queries}} & \rev{568} & \rev{460} & \rev{797} & \rev{54} & \rev{\textbf{1879}} & \rev{\textbf{1147}} \\
+\bottomrule
+\end{tabularx}
+
+\vspace{2pt}
+\rev{\footnotesize Deduplication across the whole frame removed 732 of 1879 records, leaving 1147
+distinct works. Of these, 105 are cited in the review; 90 of the cited works appeared in 2024 or
+later, and the corpus spans 2016--2026.}
+\end{table}
 
 % =====================================================================
 \section{What has to be pinned down}

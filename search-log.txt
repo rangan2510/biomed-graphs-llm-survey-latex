@@ -1,0 +1,59 @@
+Deduplicated search log -- run 2026-08-22
+Window: 2023 onward (PubMed, OpenAlex filtered at query level)
+
+Records retrieved per interface (with overlap):
+  arXiv      568
+  PubMed     460
+  OpenAlex   797
+  DBLP       54
+  TOTAL      1879
+
+Per query:
+  QID  LABEL                                   RAW  DISTINCT
+  Q1   KG + LLM, biomedical                    874       793
+  Q2   Graph RAG, biomedical                   266       245
+  Q3   KG-LLM clinical decision support        254       243
+  Q4   LLM-driven KG construction              163       154
+  Q5   KG-augmented medical QA                 322       298
+
+Distinct records after deduplication : 1147
+Duplicates removed                   : 732
+
+Key type distribution:
+  doi   823
+  arx   263
+  ttl   61
+
+Records with no usable identifier    : 3
+
+Exact query strings
+
+Q1  KG + LLM, biomedical
+  arXiv     abs:"knowledge graph" AND abs:"large language model" AND (abs:biomedical OR abs:medical OR abs:clinical)
+  PubMed    "knowledge graph"[tiab] AND ("large language model"[tiab] OR "large language models"[tiab])
+  OpenAlex  "knowledge graph" AND "large language model" AND biomedical
+  DBLP      knowledge graph large language model biomedical
+
+Q2  Graph RAG, biomedical
+  arXiv     abs:"retrieval augmented generation" AND abs:"knowledge graph" AND (abs:biomedical OR abs:medical OR abs:clinical)
+  PubMed    "retrieval augmented generation"[tiab] AND "knowledge graph"[tiab]
+  OpenAlex  "retrieval-augmented generation" AND "knowledge graph" AND biomedical
+  DBLP      graph retrieval augmented generation medical
+
+Q3  KG-LLM clinical decision support
+  arXiv     abs:"knowledge graph" AND abs:"language model" AND (abs:"clinical decision" OR abs:diagnosis OR abs:"electronic health record")
+  PubMed    "knowledge graph"[tiab] AND "language model"[tiab] AND (diagnosis[tiab] OR "decision support"[tiab])
+  OpenAlex  "knowledge graph" AND "language model" AND "clinical decision support"
+  DBLP      knowledge graph language model clinical diagnosis
+
+Q4  LLM-driven KG construction
+  arXiv     abs:"knowledge graph" AND (abs:construction OR abs:completion OR abs:extraction) AND abs:"language model" AND (abs:biomedical OR abs:medical)
+  PubMed    ("knowledge graph construction"[tiab] OR "knowledge graph completion"[tiab]) AND "language model"[tiab]
+  OpenAlex  "knowledge graph construction" AND "large language model" AND biomedical
+  DBLP      large language model knowledge graph construction biomedical
+
+Q5  KG-augmented medical QA
+  arXiv     abs:"knowledge graph" AND abs:"question answering" AND (abs:medical OR abs:biomedical OR abs:clinical)
+  PubMed    "knowledge graph"[tiab] AND "question answering"[tiab] AND (medical[tiab] OR biomedical[tiab])
+  OpenAlex  "knowledge graph" AND "question answering" AND biomedical
+  DBLP      knowledge graph medical question answering

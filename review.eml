@@ -1,0 +1,60 @@
+18-Aug-2026
+
+Dear Prof. Maulik:
+
+Manuscript ID AISE-2026-0024 entitled "Biomedical Knowledge Graphs and Large Language Models: A Critical Engineering Survey" which you submitted to the Artificial Intelligence Science and Engineering, has been reviewed.  The comments of the reviewer(s) are included at the bottom of this letter.
+
+The reviewer(s) have recommended publication, but also suggest some revisions to your manuscript.  Therefore, I invite you to respond to the reviewer(s)' comments and revise your manuscript.
+
+To revise your manuscript, log into https://mc03.manuscriptcentral.com/aisecn and enter your Author Center, where you will find your manuscript title listed under "Manuscripts with Decisions."  Under "Actions," click on "Create a Revision."  Your manuscript number has been appended to denote a revision.
+
+You may also click the below link to start the revision process (or continue the process if you have already started your revision) for your manuscript. If you use the below link you will not be required to login to ScholarOne Manuscripts.
+
+*** PLEASE NOTE: This is a two-step process. After clicking on the link, you will be directed to a webpage to confirm. ***
+
+https://mc03.manuscriptcentral.com/aisecn?URL_MASK=d4f5850b88194f9697fb7a9103fca050
+
+
+You will be unable to make your revisions on the originally submitted version of the manuscript.  Instead, revise your manuscript using a word processing program and save it on your computer.  Please also highlight the changes to your manuscript within the document by using the track changes mode in MS Word or by using bold or colored text.
+
+Once the revised manuscript is prepared, you can upload it and submit it through your Author Center.
+
+When submitting your revised manuscript, you will be able to respond to the comments made by the reviewer(s) in the space provided.  You can use this space to document any changes you make to the original manuscript.  In order to expedite the processing of the revised manuscript, please be as specific as possible in your response to the reviewer(s).
+
+IMPORTANT:  Your original files are available to you when you upload your revised manuscript.  Please delete any redundant files before completing the submission.
+
+Because we are trying to facilitate timely publication of manuscripts submitted to the Artificial Intelligence Science and Engineering, your revised manuscript should be uploaded as soon as possible.  If it is not possible for you to submit your revision in a reasonable amount of time, we may have to consider your paper as a new submission.
+
+Once again, thank you for submitting your manuscript to the Artificial Intelligence Science and Engineering and I look forward to receiving your revision.
+
+Sincerely,
+Prof. shiping wen
+Associate Editor, Artificial Intelligence Science and Engineering
+shiping.wen@uts.edu.au
+
+
+Reviewer(s)' Comments to Author:
+
+Reviewer: 1
+
+Comments to the Author
+This paper provides a systematic engineering-oriented review of the integration of biomedical knowledge graphs (KGs) and large language models (LLMs). Rather than being limited to the conventional KG→LLM / LLM→KG classification, it develops a unified analytical framework covering knowledge-flow direction, lifecycle stage, coupling depth, knowledge object, and evidence maturity, and further discusses GraphRAG, graph reasoning, agents, temporal knowledge, evaluation, clinical translation, and safety governance. Overall, the manuscript is well structured, covers recent literature, and provides valuable discussion of the limitations of KG-based grounding, faithfulness, and clinical safety. The overall quality of the manuscript is high.
+1. The paper adopts representative systems rather than exhaustive literature coverage, which is consistent with its positioning as a critical engineering survey. However, the literature selection process remains relatively qualitative. A brief structured search and screening procedure, including the databases, search terms, time range, and numbers of initially identified and finally included studies, would improve the transparency and reproducibility of the review.
+2. The proposed coupling depth (C0–C5), evaluation layers (L1–L7), and evidence maturity (E0–E6) constitute important analytical frameworks in this paper, but they are currently based mainly on conceptual categorisation. The criteria or boundaries between the different levels should be clarified further, and it should be made explicit that these frameworks are primarily intended as an engineering taxonomy.
+3. The paper covers a substantial amount of recent work from 2025–2026, some of which provides key evidence but remains in preprint form or at an early stage of validation. Peer-reviewed evidence should be more clearly distinguished from preprint or early-stage evidence in the synthesis, and the strength of broader trend-level conclusions derived from such studies should be appropriately moderated.
+4. The latter part of the manuscript contains some repetition regarding matched baselines, graph coverage, temporal leakage, provenance, and circular self-validation. Some overlapping discussion across Sections VII and X–XIII could be condensed, with cross-references to earlier sections or tables used where appropriate to improve conciseness and distinction between sections.
+
+Reviewer: 2
+
+Comments to the Author
+This survey provides a comprehensive and well-organized overview of the integration between biomedical knowledge graphs (KGs) and large language models (LLMs). The proposed multidimensional taxonomy, engineering-oriented lifecycle analysis, and evidence-centric discussion distinguish this review from existing surveys. Overall, the manuscript is technically sound, clearly written, and suitable for publication after revisions.
+
+1. The proposed engineering taxonomy is one of the major contributions of this survey. However, the practical implications of the taxonomy could be further clarified. Specifically, the authors are encouraged to discuss when different coupling depths or lifecycle stages are most appropriate for different biomedical applications, making the framework more actionable for practitioners.
+
+2. The manuscript would benefit from a concise comparison table summarizing representative KG–LLM systems, including the knowledge graph type, LLM backbone, coupling strategy, target application, advantages, and limitations. Such a summary would significantly improve readability.
+
+3. Although the survey is generally up to date, the discussion of the latest biomedical foundation models and recent GraphRAG developments could be further strengthened to better reflect the rapidly evolving landscape.
+
+4. The conclusion could be expanded by providing a more forward-looking discussion on future research directions, such as continual knowledge updating, multimodal biomedical AI, trustworthy deployment, and standardized evaluation protocols.
+
+5. The manuscript is generally well written. Nevertheless, several sections are relatively information-dense, and adding a few brief transitional or summary paragraphs between major sections would improve the overall readability.

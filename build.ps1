@@ -36,8 +36,11 @@ function Invoke-Tex($shellCommand) {
 }
 
 function Test-Prerequisites {
-    try { docker info *> $null }
-    catch { throw 'Docker does not appear to be running. Start Docker Desktop and retry.' }
+    # Suppress native stderr redirection in PowerShell to avoid tripping $ErrorActionPreference = 'Stop'
+    $null = cmd /c "docker info >nul 2>&1"
+    if ($LASTEXITCODE -ne 0) {
+        throw 'Docker does not appear to be running. Start Docker Desktop and retry.'
+    }
 
     $found = docker image ls --format '{{.Repository}}:{{.Tag}}' | Select-String -SimpleMatch $image
     if (-not $found) {

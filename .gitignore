@@ -10,3 +10,14 @@ build/
 *.out
 *.run.xml
 *.synctex.gz
+
+# Editor and AI-tooling local config
+.vscode/
+.idea/
+AGENTS.md
+CLAUDE.md
+.github/copilot-instructions.md
+.github/instructions/
+.cursor/
+.cursorrules
+.aider*
